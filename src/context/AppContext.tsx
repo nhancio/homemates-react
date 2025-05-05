@@ -1,10 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { signInWithGoogle, logoutUser } from '../services/auth';
 
 type User = {
   id: string;
   name: string;
   email: string;
+  photoURL: string;
   isPremium: boolean;
+  preferences?: string[];
 };
 
 type Filters = {
@@ -23,6 +26,8 @@ interface AppContextType {
   logout: () => void;
   favoriteProperties: string[];
   toggleFavorite: (propertyId: string) => void;
+  showPreferences: boolean;
+  setShowPreferences: (show: boolean) => void;
 }
 
 const defaultFilters: Filters = {
@@ -38,13 +43,23 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [favoriteProperties, setFavoriteProperties] = useState<string[]>([]);
+  const [showPreferences, setShowPreferences] = useState(false);
 
-  const login = (user: User) => {
-    setUser(user);
+  const login = async () => {
+    const result = await signInWithGoogle();
+    if (result.success && result.user) {
+      setUser(result.user);
+      if (result.isNewUser) {
+        setShowPreferences(true);
+      }
+    }
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    const result = await logoutUser();
+    if (result.success) {
+      setUser(null);
+    }
   };
 
   const toggleFavorite = (propertyId: string) => {
@@ -66,9 +81,18 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     logout,
     favoriteProperties,
     toggleFavorite,
+    showPreferences,
+    setShowPreferences,
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+      {showPreferences && user && (
+        <PreferencesModal onClose={() => setShowPreferences(false)} />
+      )}
+    </AppContext.Provider>
+  );
 }
 
 export function useAppContext() {

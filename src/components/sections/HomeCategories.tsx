@@ -6,51 +6,51 @@ const HomeCategories = () => {
   return (
     <section className="py-12 bg-gray-50">
       <div className="container">
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-2">Find Properties by Category</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Browse properties based on your preferences and requirements
+            Browse properties based on your preferences
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-4 mb-12">
           <CategoryCard 
             title="Flat"
-            icon={<Building className="w-6 h-6" />}
-            description="Modern apartments with all amenities for comfortable living"
+            icon={<Building className="w-5 h-5" />}
+            description="Modern apartments with amenities"
             link="/buy?type=flat"
           />
           
           <CategoryCard 
             title="Gated Community"
-            icon={<Landmark className="w-6 h-6" />}
-            description="Secure gated communities with premium lifestyle amenities"
+            icon={<Landmark className="w-5 h-5" />}
+            description="Secure communities with facilities"
             link="/buy?type=gated_community"
           />
           
           <CategoryCard 
             title="Independent House"
-            icon={<Home className="w-6 h-6" />}
-            description="Standalone houses offering privacy and freedom of space"
+            icon={<Home className="w-5 h-5" />}
+            description="Privacy and space for families"
             link="/buy?type=independent_house"
           />
           
           <CategoryCard 
             title="Villa"
-            icon={<Castle className="w-6 h-6" />}
-            description="Luxury villas with modern architecture and exclusive features"
+            icon={<Castle className="w-5 h-5" />}
+            description="Luxury homes with exclusivity"
             link="/buy?type=villa"
           />
         </div>
         
-        <div className="mt-12 text-center">
+        <div className="text-center mb-8">
           <h2 className="text-2xl font-bold mb-2">Rental Options</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            Find rental properties that match your requirements and budget
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Find your ideal rental property
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-4">
           <CategoryCard 
             title="Single Room"
             icon={<Bed className="w-6 h-6" />}

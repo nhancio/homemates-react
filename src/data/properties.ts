@@ -49,6 +49,26 @@ const mockProperties: Property[] = [
       email: 'priya.patel@example.com'
     }
   },
+  {
+    id: 'prop-3',
+    title: 'Spacious 3BHK Apartment',
+    description: 'Modern 3BHK apartment with premium amenities and great connectivity.',
+    price: 7500000,
+    location: 'HSR Layout, Bangalore',
+    type: 'Flat',
+    bedrooms: 3,
+    bathrooms: 3,
+    area: 1800,
+    images: [/* Add image URLs */],
+    features: ['Modular Kitchen', 'Power Backup', 'Club House', 'Children\'s Play Area'],
+    listingType: 'buy',
+    listedAt: '2024-03-10',
+    contactInfo: {
+      name: 'Amit Kumar',
+      phone: '+91 98765 43211',
+      email: 'amit.kumar@example.com'
+    }
+  },
   // Add more properties with Indian locations and contact details...
 ];
 

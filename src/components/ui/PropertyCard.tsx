@@ -97,7 +97,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         </div>
       </div>
       
-      {/* Action Bar */}
+      {/* Action Bar - Reordered */}
       <div className="flex border-t border-gray-200">
         <button 
           onClick={() => toggleFavorite(property.id)}

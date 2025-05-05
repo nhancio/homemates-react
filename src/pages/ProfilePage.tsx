@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { User, MapPin, Phone, Mail, Heart, Award, Settings, Clock } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Heart, Award, Settings, Clock, LogOut } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import PropertyCard from '../components/ui/PropertyCard';
 import { getMockProperties } from '../data/properties';
 
 const ProfilePage = () => {
-  const { user, isAuthenticated, favoriteProperties } = useAppContext();
+  const { user, isAuthenticated, favoriteProperties, login, logout } = useAppContext();
   
   useEffect(() => {
     // Scroll to top when component mounts
@@ -39,10 +39,12 @@ const ProfilePage = () => {
             <p className="text-gray-600 mb-6">
               Please sign in to view your profile and saved properties
             </p>
-            <div className="flex justify-center gap-4">
-              <Link to="/login" className="btn btn-primary">Sign In</Link>
-              <Link to="/register" className="btn btn-secondary">Register</Link>
-            </div>
+            <button 
+              onClick={() => login()}
+              className="flex items-center justify-center w-full btn btn-primary"
+            >
+              Sign in with Google
+            </button>
           </div>
         </div>
       </div>
@@ -63,9 +65,17 @@ const ProfilePage = () => {
               <div className="flex justify-center md:justify-start -mt-16 mb-4 md:mb-0">
                 <div className="relative">
                   <div className="w-32 h-32 rounded-full bg-white p-2">
-                    <div className="w-full h-full rounded-full bg-primary-100 flex items-center justify-center">
-                      <User className="w-16 h-16 text-primary-600" />
-                    </div>
+                    {user?.photoURL ? (
+                      <img 
+                        src={user.photoURL} 
+                        alt={user.name} 
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full rounded-full bg-primary-100 flex items-center justify-center">
+                        <User className="w-16 h-16 text-primary-600" />
+                      </div>
+                    )}
                   </div>
                   {profileUser.isPremium && (
                     <div className="absolute -right-2 -bottom-2 bg-accent-500 text-white p-1 rounded-full">
@@ -80,10 +90,13 @@ const ProfilePage = () => {
                 <div className="flex flex-col md:flex-row items-center justify-between">
                   <h1 className="text-2xl font-bold">{profileUser.name}</h1>
                   <div className="mt-2 md:mt-0">
-                    <Link to="/settings" className="btn btn-secondary">
-                      <Settings className="w-4 h-4 mr-2" />
-                      Edit Profile
-                    </Link>
+                    <button 
+                      onClick={logout}
+                      className="btn btn-primary px-8" // Added px-8 for wider button
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </button>
                   </div>
                 </div>
                 

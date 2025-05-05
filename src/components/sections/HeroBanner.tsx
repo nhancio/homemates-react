@@ -14,21 +14,21 @@ const HeroBanner = () => {
         />
       </div>
       
-      <div className="container relative py-16 md:py-24">
-        <div className="max-w-xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-            Find Your Dream Home with Homemates
+      <div className="container relative py-12 md:py-16">
+        <div className="max-w-lg">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">
+            Find Your Perfect Home
           </h1>
-          <p className="text-lg text-gray-100 mb-8">
-            Discover properties for sale, rent, and professional home services all in one place.
+          <p className="text-base text-gray-100 mb-6">
+            Your dream property is just a search away
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-3 gap-3 mb-8">
             <Link 
               to="/buy" 
-              className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-3 px-6 rounded-md font-medium transition"
+              className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-2 px-4 rounded-md font-medium transition"
             >
-              <Home className="w-5 h-5 mr-2" />
+              <Home className="w-4 h-4 mr-2" />
               Buy
             </Link>
             <Link 
@@ -50,7 +50,7 @@ const HeroBanner = () => {
       </div>
       
       {/* Property Search Bar */}
-      <div className="container relative pb-8 md:pb-12">
+      <div className="container relative pb-6 md:pb-8">
         <div className="bg-white rounded-lg shadow-lg p-6 -mb-12 md:-mb-20 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="md:col-span-2">

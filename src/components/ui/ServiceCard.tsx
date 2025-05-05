@@ -36,7 +36,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onBook }) => {
           <Clock className="w-4 h-4 mr-1 text-gray-400" />
           <span>{service.duration}</span>
           <span className="mx-2">•</span>
-          <span className="font-medium text-primary-600">${service.price}/hr</span>
+          <span className="font-medium text-primary-600">{service.price}/hr</span>
         </div>
         
         {/* Availability */}

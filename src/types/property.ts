@@ -18,3 +18,32 @@ export interface Property {
     email: string;
   };
 }
+
+export interface PropertyAmenities {
+  appliances: string[];
+  furniture: string[];
+  society: string[];
+}
+
+export interface ServiceCosts {
+  maid: number;
+  cook: number;
+  other: number;
+}
+
+export interface AdditionalBills {
+  wifi: number;
+  water: number;
+  gas: number;
+}
+
+export interface RentDetails {
+  rent: number;
+  maintenance: number;
+  securityDeposit: number;
+  setupCost: number;
+  brokerage: number;
+  electricityBill: string;
+  setupCostRefundable: boolean;
+  brokerageRefundable: boolean;
+}

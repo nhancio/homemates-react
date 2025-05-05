@@ -13,18 +13,18 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ title, icon, description, l
   return (
     <Link 
       to={link}
-      className="group bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full"
+      className="group bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full"
     >
-      <div className="p-3 rounded-full bg-primary-50 text-primary-600 w-fit mb-4 group-hover:bg-primary-100 transition-colors duration-300">
+      <div className="p-2 rounded-full bg-primary-50 text-primary-600 w-fit mb-3 group-hover:bg-primary-100 transition-colors duration-300">
         {icon}
       </div>
-      <h3 className="text-lg font-semibold mb-2 group-hover:text-primary-600 transition-colors duration-300">
+      <h3 className="text-base font-semibold mb-1 group-hover:text-primary-600 transition-colors duration-300">
         {title}
       </h3>
-      <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
-      <div className="flex items-center text-primary-600 font-medium">
-        <span className="mr-2">Explore</span>
-        <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+      <p className="text-gray-600 text-xs mb-3 flex-grow">{description}</p>
+      <div className="flex items-center text-primary-600 text-sm font-medium">
+        <span className="mr-1">Explore</span>
+        <ArrowRight className="w-3 h-3 transform group-hover:translate-x-1 transition-transform duration-300" />
       </div>
     </Link>
   );
