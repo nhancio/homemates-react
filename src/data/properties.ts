@@ -51,3 +51,12 @@ const mockProperties: Property[] = [
   },
   // Add more properties with Indian locations and contact details...
 ];
+
+// Add these export functions
+export function getMockProperties(): Property[] {
+  return mockProperties;
+}
+
+export function getPropertyById(id: string): Property | undefined {
+  return mockProperties.find(property => property.id === id);
+}
