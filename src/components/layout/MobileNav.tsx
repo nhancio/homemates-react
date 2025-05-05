@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, PlusSquare, Heart, User } from 'lucide-react';
+import { useAppContext } from '../../context/AppContext';
 
 const MobileNav = () => {
   const location = useLocation();
+  const { isAuthenticated, login } = useAppContext();
   
   const isActive = (path: string) => {
     return location.pathname === path;

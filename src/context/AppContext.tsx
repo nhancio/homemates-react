@@ -22,8 +22,8 @@ interface AppContextType {
   isAuthenticated: boolean;
   filters: Filters;
   setFilters: (filters: Filters) => void;
-  login: (user: User) => void;
-  logout: () => void;
+  login: () => Promise<void>; // Changed to return Promise
+  logout: () => Promise<void>; // Changed to return Promise
   favoriteProperties: string[];
   toggleFavorite: (propertyId: string) => void;
   showPreferences: boolean;

@@ -58,12 +58,12 @@ const HeroBanner = () => {
               <input 
                 type="text" 
                 placeholder="City, neighborhood, or address"
-                className="input"
+                className="input text-gray-900" // Added text color
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
-              <select className="input">
+              <select className="input text-gray-900"> // Added text color
                 <option value="">All Types</option>
                 <option value="flat">Flat</option>
                 <option value="gated_community">Gated Community</option>
