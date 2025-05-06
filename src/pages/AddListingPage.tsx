@@ -153,12 +153,6 @@ const AddListingPage = () => {
       return;
     }
 
-    // Validate required fields
-    if (!formData.address.city || !formData.propertyType || !formData.description) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
     setIsSubmitting(true);
     try {
       console.log('Creating listing type:', listingType);
@@ -186,11 +180,7 @@ const AddListingPage = () => {
         });
         console.log('Rent listing created:', result);
       } else {
-        // Validate sell-specific fields
-        if (!formData.sellDetails.price) {
-          throw new Error('Please enter selling price');
-        }
-        
+        // For sell listings - no validation required, everything optional
         const result = await createListing('sell', {
           ...listingData,
           sellDetails: formData.sellDetails,
@@ -751,6 +741,48 @@ const AddListingPage = () => {
               />
               <span>{highlight}</span>
             </label>
+          ))}
+        </div>
+      </section>
+
+      {/* Images Section */}
+      <section className="bg-white p-6 rounded-lg shadow-sm">
+        <h2 className="text-lg font-semibold mb-4">Upload Images</h2>
+        <p className="text-sm text-gray-600 mb-4">Upload up to 5 images (Max size: 5MB each)</p>
+        
+        {/* Image upload button */}
+        {images.length < 5 && (
+          <label className="mb-4 inline-block">
+            <span className="btn btn-secondary flex items-center">
+              <Camera className="w-4 h-4 mr-2" />
+              Select Images
+            </span>
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              multiple
+              onChange={handleImageUpload}
+            />
+          </label>
+        )}
+
+        {/* Image preview grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {images.map((img, index) => (
+            <div key={index} className="relative aspect-square">
+              <img 
+                src={img} 
+                alt={`Upload ${index + 1}`} 
+                className="w-full h-full object-cover rounded-lg"
+              />
+              <button
+                onClick={() => removeImage(index)}
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           ))}
         </div>
       </section>
