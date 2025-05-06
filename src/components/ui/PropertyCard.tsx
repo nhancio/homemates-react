@@ -25,7 +25,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   };
   
   const handleCall = () => {
-    console.log(`Calling owner of property ${property.id}`);
+    if (property.contactNumber) {
+      // Create a clickable tel: link
+      const tel = `tel:${property.contactNumber}`;
+      window.location.href = tel;
+    } else {
+      alert('Contact number not available for this property');
+    }
   };
   
   const handleShare = async () => {
@@ -39,8 +45,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
 Name: ${property.address?.buildingName || 'Property'}
 ${property.listingType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
 Type: ${property.propertyType || property.type || '-'}
-Location: ${property.address?.locality}, ${property.address?.city}
-Link: ${url}`;
+Location: ${property.address?.locality}, ${property.address?.city}`;
 
     try {
       if (navigator.share) {
@@ -143,6 +148,7 @@ Link: ${url}`;
         <button 
           onClick={handleCall}
           className="flex items-center justify-center w-1/3 py-3 text-primary-600 hover:bg-primary-50 transition border-l border-r border-gray-200"
+          aria-label={property.contactNumber ? `Call ${property.contactNumber}` : 'No contact number available'}
         >
           <Phone className="w-4 h-4 mr-1" />
           <span className="text-sm text-black">Call</span>

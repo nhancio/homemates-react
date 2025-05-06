@@ -4,69 +4,82 @@ import { Camera, MapPin, Calendar, X, Check } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { createListing } from '../services/listings';
 
+const initialFormData = {
+  // Common fields
+  address: {
+    city: '',
+    locality: '',
+    buildingName: '',
+  },
+  propertyType: '',
+  furnishingType: '',
+  parking: '',
+  buildingType: '',
+  handoverDate: '',
+  isImmediate: false,
+  description: '',
+  contactNumber: '', // Add this field
+
+  // Rent specific fields
+  rentDetails: {
+    preferredTenant: {
+      lookingFor: '', // male/female
+      preferences: [] as string[], // vegetarian, non-smoker etc
+    },
+    roomDetails: {
+      availableRooms: '', // Changed from 0 to empty string
+      roomType: '', // shared/private
+      bathroomType: '', // attached/common
+    },
+    costs: {
+      rent: '', // Changed from 0 to empty string
+      maintenance: '', // Changed from 0 to empty string
+      securityDeposit: '', // Changed from 0 to empty string
+      setupCost: '', // Changed from 0 to empty string
+      brokerage: '', // Changed from 0 to empty string
+    },
+    additionalBills: {
+      wifi: '', // Changed from 0 to empty string
+      water: '', // Changed from 0 to empty string
+      gas: '', // Changed from 0 to empty string
+      cook: '', // Changed from 0 to empty string
+      maid: '', // Changed from 0 to empty string
+      others: '', // Changed from 0 to empty string
+    }
+  },
+
+  // Amenities for both rent and sell
+  amenities: {
+    appliances: [] as string[],
+    furniture: [] as string[],
+    building: [] as string[],
+  },
+  
+  // Sell specific fields
+  sellDetails: {
+    price: '', // Changed from 0 to empty string
+    gst: '', // Changed from 0 to empty string
+  },
+  builtUpArea: '', // Changed from 0 to empty string
+  ageOfProperty: '',
+};
+
+const amenityOptions = {
+  appliances: ['TV', 'Fridge', 'AC', 'Washing Machine', 'Water Purifier', 'Geyser'],
+  furniture: ['Bed', 'Table', 'Kitchenware', 'Cupboards'],
+  building: ['Lift', 'Power Backup', 'Security', 'Clubhouse', 'CCTV', 'Games']
+};
+
+const preferredTenantOptions = {
+  preferences: ['Vegetarian', 'Non-smoker', 'Non-alcoholic', 'Pet friendly', 'Party Friendly', 'Night owl']
+};
+
 const AddListingPage = () => {
   const { isAuthenticated, user } = useAppContext();
   const navigate = useNavigate();
   const [listingType, setListingType] = useState<'rent' | 'sell'>('rent');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    // Common fields
-    address: {
-      city: '',
-      locality: '',
-      buildingName: '',
-    },
-    propertyType: '',
-    furnishingType: '',
-    parking: '',
-    buildingType: '',
-    handoverDate: '',
-    isImmediate: false,
-    description: '',
-    
-    // Rent specific fields
-    rentDetails: {
-      preferredTenant: {
-        lookingFor: '', // male/female
-        preferences: [] as string[], // vegetarian, non-smoker etc
-      },
-      roomDetails: {
-        availableRooms: 0,
-        roomType: '', // shared/private
-        bathroomType: '', // attached/common
-      },
-      costs: {
-        rent: 0,
-        maintenance: 0,
-        securityDeposit: 0,
-        setupCost: 0,
-        brokerage: 0,
-      },
-      additionalBills: {
-        wifi: 0,
-        water: 0,
-        gas: 0,
-        cook: 0,
-        maid: 0,
-        others: 0,
-      }
-    },
-
-    // Amenities for both rent and sell
-    amenities: {
-      appliances: [] as string[],
-      furniture: [] as string[],
-      building: [] as string[],
-    },
-    
-    // Sell specific fields
-    sellDetails: {
-      price: 0,
-      gst: 0,
-    },
-    builtUpArea: 0,
-    ageOfProperty: '',
-  });
+  const [formData, setFormData] = useState(initialFormData);
   
   // Image handling state
   const [images, setImages] = useState<string[]>([]);
@@ -155,7 +168,23 @@ const AddListingPage = () => {
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImages(prev => [...prev, reader.result as string]);
+          // Compress image before saving
+          const img = new Image();
+          img.src = reader.result as string;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set target width and maintain aspect ratio
+            const maxWidth = 800;
+            const scaleFactor = maxWidth / img.width;
+            canvas.width = maxWidth;
+            canvas.height = img.height * scaleFactor;
+            
+            ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const compressedImage = canvas.toDataURL('image/jpeg', 0.8);
+            setImages(prev => [...prev, compressedImage]);
+          };
         };
         reader.readAsDataURL(file);
       });
@@ -179,16 +208,6 @@ const AddListingPage = () => {
     });
   };
 
-  const preferredTenantOptions = {
-    preferences: ['Vegetarian', 'Non-smoker', 'Non-alcoholic', 'Pet friendly', 'Party Friendly', 'Night owl']
-  };
-
-  const amenityOptions = {
-    appliances: ['TV', 'Fridge', 'AC', 'Washing Machine', 'Water Purifier', 'Geyser'],
-    furniture: ['Bed', 'Sofa', 'Dining Table', 'Kitchenware', 'Cupboards'],
-    building: ['Lift', 'Security', 'Clubhouse', 'CCTV', 'Games']
-  };
-
   const renderRentFields = () => (
     <>
       {/* Preferred Tenant Section */}
@@ -196,7 +215,7 @@ const AddListingPage = () => {
         <h2 className="text-lg font-semibold mb-4">Preferred Tenant</h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Looking for</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Looking for</label>
             <select 
               className="input"
               value={formData.rentDetails.preferredTenant.lookingFor}
@@ -218,43 +237,42 @@ const AddListingPage = () => {
             </select>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            {preferredTenantOptions.preferences.map(pref => (
-              <label 
-                key={pref}
-                className={`flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50 ${
-                  formData.rentDetails.preferredTenant.preferences.includes(pref) 
-                    ? 'border-primary-500 bg-primary-50' 
-                    : ''
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={formData.rentDetails.preferredTenant.preferences.includes(pref)}
-                  onChange={() => {
-                    setFormData(prev => {
-                      const preferences = prev.rentDetails.preferredTenant.preferences;
-                      const updated = preferences.includes(pref)
-                        ? preferences.filter(p => p !== pref)
-                        : [...preferences, pref];
-                      
-                      return {
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Preferences</label>
+            <div className="flex flex-wrap gap-3">
+              {preferredTenantOptions.preferences.map(pref => (
+                <label 
+                  key={pref}
+                  className={`flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50 ${
+                    formData.rentDetails.preferredTenant.preferences.includes(pref) 
+                      ? 'border-primary-500 bg-primary-50' 
+                      : ''
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={formData.rentDetails.preferredTenant.preferences.includes(pref)}
+                    onChange={() => {
+                      const preferences = formData.rentDetails.preferredTenant.preferences;
+                      setFormData(prev => ({
                         ...prev,
                         rentDetails: {
                           ...prev.rentDetails,
                           preferredTenant: {
                             ...prev.rentDetails.preferredTenant,
-                            preferences: updated
+                            preferences: preferences.includes(pref)
+                              ? preferences.filter(p => p !== pref)
+                              : [...preferences, pref]
                           }
                         }
-                      };
-                    });
-                  }}
-                  className="form-checkbox h-4 w-4 text-primary-600"
-                />
-                <span>{pref}</span>
-              </label>
-            ))}
+                      }));
+                    }}
+                    className="form-checkbox h-4 w-4 text-primary-600"
+                  />
+                  <span>{pref}</span>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -275,7 +293,7 @@ const AddListingPage = () => {
                   ...prev.rentDetails,
                   roomDetails: {
                     ...prev.rentDetails.roomDetails,
-                    availableRooms: Number(e.target.value)
+                    availableRooms: e.target.value
                   }
                 }
               }))}
@@ -345,7 +363,7 @@ const AddListingPage = () => {
                     ...prev.rentDetails,
                     costs: {
                       ...prev.rentDetails.costs,
-                      [field]: Number(e.target.value)
+                      [field]: e.target.value
                     }
                   }
                 }))}
@@ -374,7 +392,7 @@ const AddListingPage = () => {
                     ...prev.rentDetails,
                     additionalBills: {
                       ...prev.rentDetails.additionalBills,
-                      [bill]: Number(e.target.value)
+                      [bill]: e.target.value
                     }
                   }
                 }))}
@@ -400,7 +418,7 @@ const AddListingPage = () => {
               value={formData.sellDetails.price}
               onChange={(e) => setFormData(prev => ({
                 ...prev,
-                sellDetails: { ...prev.sellDetails, price: Number(e.target.value) }
+                sellDetails: { ...prev.sellDetails, price: e.target.value }
               }))}
             />
           </div>
@@ -412,7 +430,7 @@ const AddListingPage = () => {
               value={formData.sellDetails.gst}
               onChange={(e) => setFormData(prev => ({
                 ...prev,
-                sellDetails: { ...prev.sellDetails, gst: Number(e.target.value) }
+                sellDetails: { ...prev.sellDetails, gst: e.target.value }
               }))}
             />
           </div>
@@ -432,7 +450,7 @@ const AddListingPage = () => {
               value={formData.builtUpArea}
               onChange={(e) => setFormData(prev => ({
                 ...prev,
-                builtUpArea: Number(e.target.value)
+                builtUpArea: e.target.value
               }))}
             />
           </div>
@@ -528,6 +546,27 @@ const AddListingPage = () => {
             </div>
           </section>
 
+          {/* Contact Details Section */}
+          <section className="bg-white p-6 rounded-lg shadow-sm">
+            <h2 className="text-lg font-semibold mb-4">Contact Details</h2>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Contact Number*</label>
+              <input
+                type="tel"
+                className="input"
+                placeholder="Enter your 10-digit mobile number"
+                value={formData.contactNumber}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  contactNumber: e.target.value
+                }))}
+                pattern="[0-9]{10}"
+                maxLength={10}
+                required
+              />
+            </div>
+          </section>
+
           {/* Property Details Section */}
           <section className="bg-white p-6 rounded-lg shadow-sm">
             <h2 className="text-lg font-semibold mb-4">Property Details</h2>
@@ -548,7 +587,7 @@ const AddListingPage = () => {
                 </button>
               ))}
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Furnishing Type</label>
@@ -608,7 +647,6 @@ const AddListingPage = () => {
                 />
                 <span>Immediate</span>
               </label>
-
               {!formData.isImmediate && (
                 <input
                   type="date"
@@ -677,31 +715,42 @@ const AddListingPage = () => {
           {/* Images Section */}
           <section className="bg-white p-6 rounded-lg shadow-sm">
             <h2 className="text-lg font-semibold mb-4">Upload Images</h2>
-            <div className="grid grid-cols-3 gap-4">
+            <p className="text-sm text-gray-600 mb-4">Upload up to 5 images (Max size: 5MB each)</p>
+            
+            {/* Image upload button */}
+            {images.length < 5 && (
+              <label className="mb-4 inline-block">
+                <span className="btn btn-secondary flex items-center">
+                  <Camera className="w-4 h-4 mr-2" />
+                  Select Images
+                </span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  multiple
+                  onChange={handleImageUpload}
+                />
+              </label>
+            )}
+
+            {/* Image preview grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {images.map((img, index) => (
-                <div key={index} className="relative">
-                  <img src={img} alt={`Upload ${index + 1}`} className="w-full h-32 object-cover rounded-lg" />
+                <div key={index} className="relative aspect-square">
+                  <img 
+                    src={img} 
+                    alt={`Upload ${index + 1}`} 
+                    className="w-full h-full object-cover rounded-lg"
+                  />
                   <button
                     onClick={() => removeImage(index)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
                   >
                     <X className="w-4 h-4" />
                   </button>
                 </div>
               ))}
-              {images.length < 5 && (
-                <label className="aspect-square rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center p-4 hover:border-primary-500 transition-colors cursor-pointer">
-                  <Camera className="w-8 h-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600">Add Photo</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    multiple
-                    onChange={handleImageUpload}
-                  />
-                </label>
-              )}
             </div>
           </section>
 

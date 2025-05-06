@@ -49,6 +49,29 @@ const AddressFields = ({ formData, setFormData }: AddListingFormsProps) => (
   </section>
 );
 
+const ContactNumberField = ({ formData, setFormData }: AddListingFormsProps) => (
+  <section className="bg-white p-6 rounded-lg shadow-sm">
+    <h2 className="text-lg font-semibold mb-4">Contact Details</h2>
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">Contact Number*</label>
+      <input
+        type="tel"
+        className="input"
+        placeholder="Enter your 10-digit mobile number"
+        value={formData.contactNumber || ''}
+        onChange={(e) => setFormData({
+          ...formData,
+          contactNumber: e.target.value
+        })}
+        pattern="[0-9]{10}"
+        maxLength={10}
+        required
+      />
+      <p className="text-xs text-gray-500 mt-1">This number will be displayed to interested users</p>
+    </div>
+  </section>
+);
+
 export const RentForm: React.FC<AddListingFormsProps> = ({
   formData,
   setFormData,
@@ -59,7 +82,8 @@ export const RentForm: React.FC<AddListingFormsProps> = ({
   return (
     <>
       <AddressFields formData={formData} setFormData={setFormData} />
-      
+      <ContactNumberField formData={formData} setFormData={setFormData} />
+
       {/* Property Details */}
       <section className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-lg font-semibold mb-4">Property Details</h2>
@@ -274,7 +298,8 @@ export const SellForm: React.FC<AddListingFormsProps> = ({
   return (
     <>
       <AddressFields formData={formData} setFormData={setFormData} />
-      
+      <ContactNumberField formData={formData} setFormData={setFormData} />
+
       {/* Property Details */}
       <section className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-lg font-semibold mb-4">Property Details</h2>

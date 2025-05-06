@@ -28,6 +28,7 @@ export interface ListingData {
   createdAt: number;
   userId: string;
   status: 'active' | 'inactive';
+  contactNumber: string;  // Add this field
 }
 
 export interface RentListing extends ListingData {
@@ -112,46 +113,56 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
 
 export async function getListings(type: 'rent' | 'sell', filters?: any) {
   try {
-    // Use the correct collection reference based on type
+    console.log('Getting listings for type:', type, 'with filters:', filters);
     const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
     
-    // Start with active listings query
-    let q = query(collectionRef);
+    // Start with base query
+    let baseQuery = query(collectionRef);
     
-    // Add filters if they exist
+    // Add status filter
+    baseQuery = query(baseQuery, where('status', '==', 'active'));
+    
+    // Add other filters if they exist
     if (filters) {
-      const constraints: any[] = [];
-      
-      if (filters.priceMin) {
-        constraints.push(where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '>=', Number(filters.priceMin)));
-      }
-      if (filters.priceMax) {
-        constraints.push(where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '<=', Number(filters.priceMax)));
-      }
       if (filters.propertyType) {
-        constraints.push(where('propertyType', '==', filters.propertyType));
-      }
-      if (filters.location) {
-        constraints.push(where('address.city', '==', filters.location));
+        baseQuery = query(baseQuery, where('propertyType', '==', filters.propertyType));
       }
       
-      if (constraints.length > 0) {
-        q = query(collectionRef, ...constraints);
+      // Add other filters as needed...
+    }
+
+    // Execute query
+    const snapshot = await getDocs(baseQuery);
+    console.log('Query returned:', snapshot.size, 'documents');
+
+    // Transform and filter results
+    const listings = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      contactNumber: doc.data().contactNumber || ''
+    }));
+
+    // Apply client-side filters that don't require indexes
+    let filteredListings = listings;
+    if (filters) {
+      if (filters.priceMin || filters.priceMax) {
+        filteredListings = filteredListings.filter(listing => {
+          const price = type === 'rent' 
+            ? listing.rentDetails?.costs?.rent 
+            : listing.sellDetails?.price;
+          
+          if (filters.priceMin && price < Number(filters.priceMin)) return false;
+          if (filters.priceMax && price > Number(filters.priceMax)) return false;
+          return true;
+        });
       }
     }
 
-    const snapshot = await getDocs(q);
-    
-    if (snapshot.empty) {
-      return [];
-    }
+    console.log('Returning filtered listings:', filteredListings.length);
+    return filteredListings;
 
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
   } catch (error) {
-    console.error('Error fetching listings:', error);
-    throw new Error('Failed to fetch listings. Please try again later.');
+    console.error('Error in getListings:', error);
+    throw new Error(`Failed to fetch ${type} listings: ${error.message}`);
   }
 }
