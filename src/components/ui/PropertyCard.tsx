@@ -13,9 +13,10 @@ import { useNavigate } from 'react-router-dom';
 
 interface PropertyCardProps {
   property: Property;
+  listingType?: 'rent' | 'buy'; // Add this prop
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType }) => {
   const { favoriteProperties, toggleFavorite } = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
@@ -67,11 +68,10 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
   };
 
   const handleCardClick = () => {
-    // Ensure listingType is properly set
-    const path = property.listingType === 'rent' 
-      ? `/rent/${property.id}`  
-      : `/buy/${property.id}`;
-    console.log('Navigating to:', path, 'Property:', property); // Add logging
+    // Use either the passed listingType prop or determine from property data
+    const propertyType = listingType || property.listingType;
+    const path = propertyType === 'rent' ? `/rent/${property.id}` : `/buy/${property.id}`;
+    console.log('Navigating to:', path, 'Property:', property);
     navigate(path);
   };
   
