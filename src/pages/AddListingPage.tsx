@@ -61,7 +61,9 @@ const AddListingPage = () => {
     sellDetails: {
       price: 0,
       gst: 0,
-    }
+    },
+    builtUpArea: 0,
+    ageOfProperty: '',
   });
   
   // Image handling state
@@ -324,7 +326,6 @@ const AddListingPage = () => {
     </>
   );
 
-  // Add a helper function to render sell-specific fields
   const renderSellFields = () => (
     <>
       {/* Cost Details Section */}
@@ -354,6 +355,43 @@ const AddListingPage = () => {
                 sellDetails: { ...prev.sellDetails, gst: Number(e.target.value) }
               }))}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Built-up Area Section */}
+      <section className="bg-white p-6 rounded-lg shadow-sm">
+        <h2 className="text-lg font-semibold mb-4">Property Details</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Built-up Area (sq ft)</label>
+            <input
+              type="number"
+              className="input"
+              placeholder="Enter built-up area"
+              value={formData.builtUpArea}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                builtUpArea: Number(e.target.value)
+              }))}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Age of Property</label>
+            <select
+              className="input"
+              value={formData.ageOfProperty}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                ageOfProperty: e.target.value
+              }))}
+            >
+              <option value="">Select Age</option>
+              <option value="0-2">0-2 years</option>
+              <option value="2-5">2-5 years</option>
+              <option value="5-10">5-10 years</option>
+              <option value="10+">10+ years</option>
+            </select>
           </div>
         </div>
       </section>
@@ -531,34 +569,36 @@ const AddListingPage = () => {
           )}
 
           {/* Amenities Section */}
-          <section className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">Amenities</h2>
-            {Object.entries(amenityOptions).map(([category, items]) => (
-              <div key={category} className="mb-6 last:mb-0">
-                <h3 className="text-md font-medium mb-3 capitalize">{category}</h3>
-                <div className="flex flex-wrap gap-3">
-                  {items.map(item => (
-                    <label 
-                      key={item}
-                      className={`flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50 ${
-                        formData.amenities[category as keyof typeof formData.amenities].includes(item)
-                          ? 'border-primary-500 bg-primary-50'
-                          : ''
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.amenities[category as keyof typeof formData.amenities].includes(item)}
-                        onChange={() => handleAmenityToggle(category as 'appliances' | 'furniture' | 'building', item)}
-                        className="form-checkbox h-4 w-4 text-primary-600"
-                      />
-                      <span>{item}</span>
-                    </label>
-                  ))}
+          {listingType === 'rent' && (
+            <section className="bg-white p-6 rounded-lg shadow-sm">
+              <h2 className="text-lg font-semibold mb-4">Amenities</h2>
+              {Object.entries(amenityOptions).map(([category, items]) => (
+                <div key={category} className="mb-6 last:mb-0">
+                  <h3 className="text-md font-medium mb-3 capitalize">{category}</h3>
+                  <div className="flex flex-wrap gap-3">
+                    {items.map(item => (
+                      <label 
+                        key={item}
+                        className={`flex items-center space-x-2 p-2 border rounded cursor-pointer hover:bg-gray-50 ${
+                          formData.amenities[category as keyof typeof formData.amenities].includes(item)
+                            ? 'border-primary-500 bg-primary-50'
+                            : ''
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.amenities[category as keyof typeof formData.amenities].includes(item)}
+                          onChange={() => handleAmenityToggle(category as 'appliances' | 'furniture' | 'building', item)}
+                          className="form-checkbox h-4 w-4 text-primary-600"
+                        />
+                        <span>{item}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </section>
+              ))}
+            </section>
+          )}
 
           {/* Description Section */}
           <section className="bg-white p-6 rounded-lg shadow-sm">

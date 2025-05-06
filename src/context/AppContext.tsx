@@ -1,6 +1,31 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { signInWithGoogle, logoutUser } from '../services/auth';
 
+type BaseFilters = {
+  priceMin: number;
+  priceMax: number;
+  location: string;
+  propertyType: string;
+};
+
+type RentFilters = BaseFilters & {
+  roomType: string;
+  tenantType: string;
+  bathroomType: string;
+};
+
+type BuyFilters = BaseFilters & {
+  builtUpArea: number;
+  ageOfProperty: string;
+  possessionStatus: string;
+};
+
+type Filters = {
+  rent: RentFilters;
+  buy: BuyFilters;
+  activeType: 'rent' | 'buy';
+};
+
 type User = {
   id: string;
   name: string;
@@ -8,13 +33,6 @@ type User = {
   photoURL: string;
   isPremium: boolean;
   preferences?: string[];
-};
-
-type Filters = {
-  priceMin: number;
-  priceMax: number;
-  location: string;
-  propertyType: string;
 };
 
 interface AppContextType {
@@ -31,10 +49,25 @@ interface AppContextType {
 }
 
 const defaultFilters: Filters = {
-  priceMin: 0,
-  priceMax: 10000000,
-  location: '',
-  propertyType: '',
+  activeType: 'buy',
+  rent: {
+    priceMin: 0,
+    priceMax: 100000,
+    location: '',
+    propertyType: '',
+    roomType: '',
+    tenantType: '',
+    bathroomType: ''
+  },
+  buy: {
+    priceMin: 0,
+    priceMax: 10000000,
+    location: '',
+    propertyType: '',
+    builtUpArea: 0,
+    ageOfProperty: '',
+    possessionStatus: ''
+  }
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
