@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Logo & Copyright */}
           <div className="flex items-center space-x-2">
             <img 
-              src="/src/assets/homemates-logo.jpeg" 
+              src="/images/homemates-logo.jpeg" 
               alt="Homemates Logo" 
               className="h-6 w-6"
             />
@@ -25,7 +25,12 @@ const Footer = () => {
             <a href="https://www.linkedin.com/company/homemates-ai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="https://wa.me/your-number" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+            <a 
+              href="https://chat.whatsapp.com/Iu4iWfmQEVZB6UHRqHKRYt" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="hover:text-white transition"
+            >
               <MessageCircle className="w-5 h-5" />
             </a>
           </div>
