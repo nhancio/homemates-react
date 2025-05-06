@@ -7,6 +7,27 @@ interface PropertyFiltersProps {
   listingType: 'buy' | 'rent';
 }
 
+const defaultFilters = {
+  rent: {
+    priceMin: 0,
+    priceMax: 100000,
+    location: '',
+    propertyType: '',
+    roomType: '',
+    tenantType: '',
+    bathroomType: ''
+  },
+  buy: {
+    priceMin: 0,
+    priceMax: 10000000,
+    location: '',
+    propertyType: '',
+    builtUpArea: 0,
+    ageOfProperty: '',
+    possessionStatus: ''
+  }
+};
+
 const PropertyFilters: React.FC<PropertyFiltersProps> = ({ propertyTypes, listingType }) => {
   const { filters, setFilters } = useAppContext();
   const [isFilterOpen, setIsFilterOpen] = useState(false);

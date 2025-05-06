@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { USER_PREFERENCES } from '../../constants/theme';
 
+const defaultPreferences = USER_PREFERENCES.map(pref => pref.id);
+
 interface PreferencesModalProps {
   onClose: () => void;
 }

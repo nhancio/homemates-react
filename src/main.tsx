@@ -18,4 +18,4 @@ createRoot(rootElement).render(
       <App />
     </BrowserRouter>
   </StrictMode>
-);  
+);

@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import MobileNav from './MobileNav';
 import Footer from './Footer';
 import PreferencesModal from '../modals/PreferencesModal';
+import PWAInstallPrompt from '../ui/PWAInstallPrompt';
 import { useAppContext } from '../../context/AppContext';
 
 const Layout = () => {
@@ -17,6 +18,7 @@ const Layout = () => {
       </main>
       <Footer />
       <MobileNav />
+      <PWAInstallPrompt />
       {showPreferences && <PreferencesModal onClose={() => {}} />}
     </div>
   );

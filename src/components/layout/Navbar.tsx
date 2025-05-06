@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, PlusSquare, Heart, User } from 'lucide-react';
+import { PlusSquare, Heart, User, Home } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
 const Navbar = () => {
@@ -17,7 +17,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Home className="w-6 h-6 text-primary-600" />
+            <img 
+              src="/src/assets/homemates-logo.jpeg" 
+              alt="Homemates Logo" 
+              className="h-8 w-8 rounded-full"
+            />
             <span className="text-xl font-bold text-primary-600">Homemates</span>
           </Link>
 

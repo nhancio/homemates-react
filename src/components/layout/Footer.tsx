@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Mail, Instagram, Linkedin, MessageCircle } from 'lucide-react';
+import { Mail, Instagram, Linkedin, MessageCircle, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -9,7 +9,11 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Logo & Copyright */}
           <div className="flex items-center space-x-2">
-            <Home className="w-5 h-5 text-primary-500" />
+            <img 
+              src="/src/assets/homemates-logo.jpeg" 
+              alt="Homemates Logo" 
+              className="h-6 w-6"
+            />
             <span className="text-lg font-semibold text-white">Homemates</span>
           </div>
           
