@@ -112,32 +112,46 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
 
 export async function getListings(type: 'rent' | 'sell', filters?: any) {
   try {
+    // Use the correct collection reference based on type
     const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
-    let q = query(collectionRef, where('status', '==', 'active'));
+    
+    // Start with active listings query
+    let q = query(collectionRef);
     
     // Add filters if they exist
     if (filters) {
+      const constraints: any[] = [];
+      
       if (filters.priceMin) {
-        q = query(q, where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '>=', filters.priceMin));
+        constraints.push(where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '>=', Number(filters.priceMin)));
       }
       if (filters.priceMax) {
-        q = query(q, where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '<=', filters.priceMax));
+        constraints.push(where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '<=', Number(filters.priceMax)));
       }
       if (filters.propertyType) {
-        q = query(q, where('propertyType', '==', filters.propertyType));
+        constraints.push(where('propertyType', '==', filters.propertyType));
       }
       if (filters.location) {
-        q = query(q, where('address.city', '==', filters.location));
+        constraints.push(where('address.city', '==', filters.location));
+      }
+      
+      if (constraints.length > 0) {
+        q = query(collectionRef, ...constraints);
       }
     }
-    
+
     const snapshot = await getDocs(q);
+    
+    if (snapshot.empty) {
+      return [];
+    }
+
     return snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
   } catch (error) {
     console.error('Error fetching listings:', error);
-    throw error;
+    throw new Error('Failed to fetch listings. Please try again later.');
   }
 }

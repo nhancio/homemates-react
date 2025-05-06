@@ -17,10 +17,6 @@ const BuyPropertiesPage = () => {
   const { filters } = useAppContext();
   const [listingType, setListingType] = useState<'buy' | 'rent'>('buy');
 
-  useEffect(() => {
-    fetchProperties();
-  }, [listingType, filters[listingType]]);
-
   const fetchProperties = async () => {
     try {
       setIsLoading(true);
@@ -29,11 +25,15 @@ const BuyPropertiesPage = () => {
       setProperties(listings);
     } catch (err) {
       console.error('Error fetching properties:', err);
-      setError('Failed to load properties. Please try again later.');
+      setError(err instanceof Error ? err.message : 'Failed to load properties. Please try again later.');
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProperties();
+  }, [listingType, filters[listingType]]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Share2, Heart } from 'lucide-react';
+import { Phone, Share2, Heart, Building } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -45,19 +45,25 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           modules={[Navigation, Pagination]}
           navigation
           pagination={{ clickable: true }}
-          loop={true}
+          loop={property.images?.length > 0}
           className="h-52"
         >
-          {property.images.map((image, index) => (
+          {(property.images?.length > 0 ? property.images : ['placeholder']).map((image, index) => (
             <SwiperSlide key={index}>
               <div className={`h-52 bg-gray-200 ${!isLoaded ? 'animate-pulse' : ''}`}>
-                <img
-                  src={image}
-                  alt={`${property.title} - Image ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  onLoad={handleImageLoad}
-                  loading="lazy"
-                />
+                {image === 'placeholder' ? (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <Building className="w-12 h-12" />
+                  </div>
+                ) : (
+                  <img
+                    src={image}
+                    alt={`${property.title || 'Property'} - Image ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    onLoad={handleImageLoad}
+                    loading="lazy"
+                  />
+                )}
               </div>
             </SwiperSlide>
           ))}
@@ -66,7 +72,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         {/* Property Type Badge */}
         <div className="absolute top-3 left-3 z-10">
           <span className="bg-primary-600 text-white text-xs font-semibold px-2 py-1 rounded">
-            {property.type}
+            {property.propertyType || property.type}
           </span>
         </div>
       </div>
@@ -74,30 +80,36 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       {/* Property Information */}
       <div className="p-4">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold line-clamp-1">{property.title}</h3>
-          <span className="text-lg font-bold text-primary-600">₹{formatCurrency(property.price)}</span>
+          <h3 className="text-lg font-semibold line-clamp-1">
+            {property.address?.buildingName || 'Property'}
+          </h3>
+          <span className="text-lg font-bold text-primary-600">
+            ₹{formatCurrency(property.rentDetails?.costs?.rent || property.sellDetails?.price || 0)}
+          </span>
         </div>
         
-        <p className="text-gray-600 text-sm mt-1 line-clamp-1">{property.location}</p>
+        <p className="text-gray-600 text-sm mt-1 line-clamp-1">
+          {property.address?.locality}, {property.address?.city}
+        </p>
         
         {/* Property Features */}
         <div className="flex gap-4 mt-3 text-sm text-gray-700">
           <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.bedrooms}</span>
-            <span className="text-xs text-gray-500">Beds</span>
+            <span className="font-semibold">{property.propertyType?.charAt(0) || '-'}</span>
+            <span className="text-xs text-gray-500">Type</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.bathrooms}</span>
-            <span className="text-xs text-gray-500">Baths</span>
+            <span className="font-semibold">{property.furnishingType?.charAt(0) || '-'}</span>
+            <span className="text-xs text-gray-500">Furnishing</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.area}</span>
-            <span className="text-xs text-gray-500">Sq.ft</span>
+            <span className="font-semibold">{property.parking || '-'}</span>
+            <span className="text-xs text-gray-500">Parking</span>
           </div>
         </div>
       </div>
       
-      {/* Action Bar - Reordered */}
+      {/* Action Bar */}
       <div className="flex border-t border-gray-200">
         <button 
           onClick={() => toggleFavorite(property.id)}
@@ -126,4 +138,4 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   );
 };
 
-export default PropertyCard
+export default PropertyCard;
