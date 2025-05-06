@@ -37,6 +37,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   };
   
   const handleShare = async () => {
+    const shareUrl = property.listingType === 'rent' ? `/rent/${property.id}` : `/buy/${property.id}`;
     const url = getShareableUrl(property.id, property.listingType);
     const price = property.listingType === 'rent' 
       ? property.rentDetails?.costs?.rent 
@@ -66,8 +67,12 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
   };
 
   const handleCardClick = () => {
-    const path = property.listingType === 'rent' ? 'rent' : 'buy';
-    navigate(`/${path}/${property.id}`);
+    // Ensure listingType is properly set
+    const path = property.listingType === 'rent' 
+      ? `/rent/${property.id}`  
+      : `/buy/${property.id}`;
+    console.log('Navigating to:', path, 'Property:', property); // Add logging
+    navigate(path);
   };
   
   return (

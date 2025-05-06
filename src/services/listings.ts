@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { getAuth } from 'firebase/auth';
 
@@ -164,5 +164,32 @@ export async function getListings(type: 'rent' | 'sell', filters?: any) {
   } catch (error) {
     console.error('Error in getListings:', error);
     throw new Error(`Failed to fetch ${type} listings: ${error.message}`);
+  }
+}
+
+export async function getPropertyById(type: 'rent' | 'sell', id: string) {
+  try {
+    console.log('Fetching property:', { type, id });
+    // Use 'r' for rent and 's' for sell collections
+    const collectionName = type === 'rent' ? 'r' : 's';
+    const docRef = doc(db, collectionName, id);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      console.log('Document not found in collection:', collectionName);
+      throw new Error('Property not found');
+    }
+
+    const data = docSnap.data();
+    console.log('Found property data:', data);
+
+    return {
+      id: docSnap.id,
+      ...data,
+      listingType: type // Add listing type to response
+    };
+  } catch (error) {
+    console.error('Error fetching property:', error);
+    throw error;
   }
 }
