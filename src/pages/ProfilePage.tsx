@@ -92,7 +92,7 @@ const ProfilePage = () => {
                   <div className="mt-2 md:mt-0">
                     <button 
                       onClick={logout}
-                      className="btn btn-primary px-8" // Added px-8 for wider button
+                      className="btn btn-primary px-10" // Increased padding from px-8 to px-10
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Logout
@@ -104,18 +104,6 @@ const ProfilePage = () => {
                   <p className="flex items-center justify-center md:justify-start text-gray-600">
                     <Mail className="w-4 h-4 mr-2" />
                     {profileUser.email}
-                  </p>
-                  <p className="flex items-center justify-center md:justify-start text-gray-600">
-                    <Phone className="w-4 h-4 mr-2" />
-                    +1 (555) 123-4567
-                  </p>
-                  <p className="flex items-center justify-center md:justify-start text-gray-600">
-                    <MapPin className="w-4 h-4 mr-2" />
-                    New York, USA
-                  </p>
-                  <p className="flex items-center justify-center md:justify-start text-gray-600">
-                    <Clock className="w-4 h-4 mr-2" />
-                    Member since June 2023
                   </p>
                 </div>
               </div>
