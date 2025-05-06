@@ -73,7 +73,11 @@ const defaultFilters: Filters = {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    // Try to get user from localStorage on initial load
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const [filters, setFilters] = useState<Filters>(defaultFilters);
   const [favoriteProperties, setFavoriteProperties] = useState<string[]>([]);
   const [showPreferences, setShowPreferences] = useState(false);
@@ -82,6 +86,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     const result = await signInWithGoogle();
     if (result.success && result.user) {
       setUser(result.user);
+      // Save user to localStorage
+      localStorage.setItem('user', JSON.stringify(result.user));
       if (result.isNewUser) {
         setShowPreferences(true);
       }
@@ -92,6 +98,8 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     const result = await logoutUser();
     if (result.success) {
       setUser(null);
+      // Remove user from localStorage
+      localStorage.removeItem('user');
     }
   };
 

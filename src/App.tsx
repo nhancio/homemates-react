@@ -22,6 +22,8 @@ function App() {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="add-listing" element={<AddListingPage />} />
           <Route path="saved" element={<SavedPage />} />
+          <Route path="r/:propertyId" element={<RentPropertiesPage />} />
+          <Route path="s/:propertyId" element={<BuyPropertiesPage />} />
         </Route>
       </Routes>
     </AppContextProvider>

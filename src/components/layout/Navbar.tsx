@@ -20,7 +20,7 @@ const Navbar = () => {
             <img 
               src="/src/assets/homemates-logo.jpeg" 
               alt="Homemates Logo" 
-              className="h-8 w-8 rounded-full"
+              className="h-8 w-8"
             />
             <span className="text-xl font-bold text-primary-600">Homemates</span>
           </Link>

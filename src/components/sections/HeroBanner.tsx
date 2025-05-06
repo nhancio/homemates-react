@@ -23,7 +23,7 @@ const HeroBanner = () => {
             Your dream property is just a search away
           </p>
           
-          <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="grid grid-cols-2 gap-3 mb-8">
             <Link 
               to="/buy" 
               className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-2 px-4 rounded-md font-medium transition"
@@ -37,13 +37,6 @@ const HeroBanner = () => {
             >
               <Key className="w-5 h-5 mr-2" />
               Rent
-            </Link>
-            <Link 
-              to="/services" 
-              className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-3 px-6 rounded-md font-medium transition"
-            >
-              <Wrench className="w-5 h-5 mr-2" />
-              Services
             </Link>
           </div>
         </div>

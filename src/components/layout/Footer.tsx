@@ -19,10 +19,10 @@ const Footer = () => {
           
           {/* Social Media Links */}
           <div className="flex items-center space-x-4">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+            <a href="https://www.instagram.com/homemates.ai/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
               <Instagram className="w-5 h-5" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+            <a href="https://www.linkedin.com/company/homemates-ai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
               <Linkedin className="w-5 h-5" />
             </a>
             <a href="https://wa.me/your-number" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
@@ -34,7 +34,7 @@ const Footer = () => {
           <div className="flex space-x-6">
             <Link to="/privacy" className="hover:text-white transition">Privacy</Link>
             <Link to="/terms" className="hover:text-white transition">Terms</Link>
-            <a href="mailto:contact@homemates.com" className="flex items-center hover:text-white transition">
+            <a href="mailto:nithindidigam@gmail.com" className="flex items-center hover:text-white transition">
               <Mail className="w-4 h-4 mr-1" />
               Contact
             </a>

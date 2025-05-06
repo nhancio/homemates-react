@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import { useAppContext } from '../../context/AppContext';
 import { Property } from '../../types/property';
 import { formatCurrency } from '../../utils/format';
+import { getShareableUrl } from '../../utils/share';
 
 interface PropertyCardProps {
   property: Property;
@@ -27,14 +28,25 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     console.log(`Calling owner of property ${property.id}`);
   };
   
-  const handleShare = () => {
-    navigator.share?.({
-      title: property.title,
-      text: `Check out this property: ${property.title}`,
-      url: window.location.href,
-    }).catch(err => {
+  const handleShare = async () => {
+    const url = getShareableUrl(property.id, property.listingType);
+    
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: property.title || 'Check out this property',
+          text: property.description || 'Found this great property on Homemates',
+          url: url
+        });
+      } else {
+        // Fallback to clipboard copy
+        await navigator.clipboard.writeText(url);
+        // You might want to show a toast notification here
+        alert('Link copied to clipboard!');
+      }
+    } catch (err) {
       console.error('Error sharing property:', err);
-    });
+    }
   };
   
   return (
