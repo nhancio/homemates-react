@@ -4,18 +4,18 @@ import { Home, Users, Key } from 'lucide-react';
 
 const HeroBanner = () => {
   return (
-    <section className="relative text-white py-8">
+    <section className="relative py-8">
       {/* Full Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1600')"
+          backgroundImage: "url('https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1600')"
         }}
       />
 
       {/* Content Overlay */}
       <div className="container relative z-10">
-        <div className="text-center max-w-3xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto text-white">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Find Your Perfect Home & Flatmates
           </h1>
