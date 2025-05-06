@@ -1,38 +1,48 @@
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { auth, db } from '../config/firebase';
 
-export interface UserData {
+export interface UserProfile {
   id: string;
-  name: string;
-  email: string;
-  photoURL: string;
-  company?: string;
-  mobile?: string;
-  preferences?: string[];
+  userEmail: string;
+  userName: string;
+  userPhoneNumber: string;
+  age: number;
+  gender: string;
+  profession: string;
+  preferences: string[];
 }
 
-export const getAllUsers = async (): Promise<UserData[]> => {
+export async function getUsers(): Promise<UserProfile[]> {
   try {
-    const usersCollection = collection(db, 'users');
-    const snapshot = await getDocs(usersCollection);
+    // Check if user is authenticated
+    if (!auth.currentUser) {
+      throw new Error('Authentication required');
+    }
+
+    const querySnapshot = await getDocs(collection(db, 'users'));
+    console.log('Raw Firestore Response:', querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     
-    const users: UserData[] = [];
-    snapshot.forEach((doc) => {
-      const userData = doc.data();
-      users.push({
+    const users = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      console.log('Processing user document:', { id: doc.id, data });
+      
+      return {
         id: doc.id,
-        name: userData.name || '',
-        email: userData.email || '',
-        photoURL: userData.photoURL || '',
-        company: userData.company,
-        mobile: userData.mobile,
-        preferences: userData.preferences
-      });
+        userEmail: data.userEmail || '',
+        userName: data.userName || '',
+        userPhoneNumber: data.userPhoneNumber || '',
+        age: Number(data.age) || 0,
+        gender: data.gender || '',
+        profession: data.profession || '',
+        preferences: data.preferences || []
+      };
     });
 
+    console.log('Processed users:', users);
     return users;
+
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('Failed to fetch users:', error);
     throw error;
   }
-};
+}

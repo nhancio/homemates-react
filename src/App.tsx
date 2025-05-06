@@ -37,7 +37,7 @@ const router = createBrowserRouter([
       { path: 'profile', element: <ProfilePage /> },
       { path: 'add-listing', element: <AddListingPage /> },
       { path: 'saved', element: <SavedPage /> },
-      { path: 'find-friends', element: <FindFriendsPage /> }
+      { path: 'users', element: <FindFriendsPage /> }
     ]
   }
 ]);

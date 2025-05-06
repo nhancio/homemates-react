@@ -97,6 +97,7 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
     console.log('Creating listing with data:', cleanData);
     console.log('Collection:', type === 'rent' ? 'r' : 's');
 
+    // Use correct collection names - 'r' for rent and 's' for sell
     const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
     const docRef = await addDoc(collectionRef, cleanData);
     
@@ -114,6 +115,7 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
 export async function getListings(type: 'rent' | 'sell', filters?: any) {
   try {
     console.log('Getting listings for type:', type, 'with filters:', filters);
+    // Use correct collection names - 'r' for rent and 's' for sell
     const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
     
     // Start with base query

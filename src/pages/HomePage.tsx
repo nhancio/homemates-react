@@ -12,10 +12,8 @@ const HomePage = () => {
   return (
     <div>
       <HeroBanner />
-      <div className="mt-24">
+      <div className="mt-8"> {/* Reduced from mt-24 */}
         <HomeCategories />
-        {/* Services section commented out for now */}
-        {/* <HomeServices /> */}
       </div>
     </div>
   );
