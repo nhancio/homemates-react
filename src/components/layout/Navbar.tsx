@@ -18,7 +18,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <img 
-              src="/images/homemates-logo.jpeg" 
+              src="/images/homemates-logo.jpeg" // This should now work in both dev and production
               alt="Homemates Logo" 
               className="h-8 w-8"
             />
