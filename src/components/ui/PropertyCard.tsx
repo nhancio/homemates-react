@@ -9,6 +9,7 @@ import { useAppContext } from '../../context/AppContext';
 import { Property } from '../../types/property';
 import { formatCurrency } from '../../utils/format';
 import { getShareableUrl } from '../../utils/share';
+import { useNavigate } from 'react-router-dom';
 
 interface PropertyCardProps {
   property: Property;
@@ -17,6 +18,7 @@ interface PropertyCardProps {
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const { favoriteProperties, toggleFavorite } = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate();
   
   const isFavorite = favoriteProperties.includes(property.id);
   
@@ -62,9 +64,17 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
       console.error('Error sharing property:', err);
     }
   };
+
+  const handleCardClick = () => {
+    const path = property.listingType === 'rent' ? 'rent' : 'buy';
+    navigate(`/${path}/${property.id}`);
+  };
   
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-property-card hover:shadow-lg transition-shadow duration-300">
+    <div 
+      className="bg-white rounded-lg overflow-hidden shadow-property-card hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+      onClick={handleCardClick}
+    >
       {/* Image Carousel */}
       <div className="relative">
         <Swiper
