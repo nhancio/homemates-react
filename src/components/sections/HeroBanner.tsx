@@ -23,28 +23,28 @@ const HeroBanner = () => {
             Your dream property is just a click away
           </p>
           
-          {/* Mobile-responsive button grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto">
+          {/* Mobile-responsive button grid - Updated for 2x2 layout on mobile */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg mx-auto">
             <Link 
               to="/rent" 
-              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-4 sm:p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
             >
-              <Key className="w-8 h-8 mb-2" />
-              <span>Rent</span>
+              <Key className="w-6 h-6 sm:w-8 sm:h-8 mb-2" />
+              <span className="text-sm sm:text-base">Rent</span>
             </Link>
             <Link 
               to="/users"
-              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-4 sm:p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
             >
-              <Users className="w-8 h-8 mb-2" />
-              <span>Find Friends</span>
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 mb-2" />
+              <span className="text-sm sm:text-base">Find Friends</span>
             </Link>
             <Link 
               to="/buy" 
-              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+              className="col-span-2 sm:col-span-1 aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-4 sm:p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
             >
-              <Home className="w-8 h-8 mb-2" />
-              <span>Buy</span>
+              <Home className="w-6 h-6 sm:w-8 sm:h-8 mb-2" />
+              <span className="text-sm sm:text-base">Buy</span>
             </Link>
           </div>
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropertyFilters from '../components/filters/PropertyFilters';
 import PropertyCard from '../components/ui/PropertyCard';
-import { Building, Loader } from 'lucide-react';
+import { Building, Loader, User } from 'lucide-react';
 import { getListings } from '../services/listings';
 import { useAppContext } from '../context/AppContext';
 
@@ -18,7 +18,7 @@ const RentPropertiesPage = () => {
   const [properties, setProperties] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { filters } = useAppContext();
+  const { filters, isAuthenticated, login } = useAppContext();
   
   useEffect(() => {
     fetchProperties();
@@ -47,6 +47,28 @@ const RentPropertiesPage = () => {
     document.title = 'Rent Properties | Homemates';
   }, []);
   
+  if (!isAuthenticated) {
+    return (
+      <div className="py-20">
+        <div className="container">
+          <div className="max-w-md mx-auto text-center">
+            <User className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Sign In Required</h2>
+            <p className="text-gray-600 mb-6">
+              Please sign in to view rental properties
+            </p>
+            <button 
+              onClick={() => login()}
+              className="flex items-center justify-center w-full btn btn-primary"
+            >
+              Sign in with Google
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
