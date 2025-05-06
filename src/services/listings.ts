@@ -1,5 +1,6 @@
 import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import { getAuth } from 'firebase/auth';
 
 // Collection references
 const rentCollection = collection(db, 'r');
@@ -66,12 +67,47 @@ export interface SellListing extends ListingData {
 }
 
 export async function createListing(type: 'rent' | 'sell', data: RentListing | SellListing) {
-  const collection = type === 'rent' ? rentCollection : sellCollection;
-  return await addDoc(collection, {
-    ...data,
-    createdAt: Date.now(),
-    status: 'active'
-  });
+  try {
+    // Validate user is authenticated
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('User must be authenticated to create a listing');
+    }
+
+    // Sanitize the data to ensure all fields exist
+    const sanitizedData = {
+      ...data,
+      createdAt: Date.now(),
+      status: 'active' as const,
+      userId: user.uid, // Ensure userId is set from authenticated user
+    };
+
+    // Remove any undefined or null values and empty arrays/objects
+    const cleanData = Object.entries(sanitizedData).reduce((acc, [key, value]) => {
+      if (value != null && 
+          !(Array.isArray(value) && value.length === 0) &&
+          !(typeof value === 'object' && Object.keys(value).length === 0)) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    console.log('Creating listing with data:', cleanData);
+    console.log('Collection:', type === 'rent' ? 'r' : 's');
+
+    const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
+    const docRef = await addDoc(collectionRef, cleanData);
+    
+    console.log('Document written with ID:', docRef.id);
+    return { success: true, id: docRef.id };
+  } catch (error) {
+    console.error('Error creating listing:', error);
+    if (error.code === 'permission-denied') {
+      throw new Error('You do not have permission to create listings');
+    }
+    throw error;
+  }
 }
 
 export async function getListings(type: 'rent' | 'sell', filters?: any) {

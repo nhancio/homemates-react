@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, MapPin, Calendar, X, Check } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { createListing } from '../services/listings';
 
 const AddListingPage = () => {
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, user } = useAppContext();
   const navigate = useNavigate();
   const [listingType, setListingType] = useState<'rent' | 'sell'>('rent');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // Common fields
     address: {
@@ -78,10 +80,68 @@ const AddListingPage = () => {
     document.title = 'Add Listing | Homemates';
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted');
+    if (!user) {
+      alert('Please login to create a listing');
+      return;
+    }
+
+    // Validate required fields
+    if (!formData.address.city || !formData.propertyType || !formData.description) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      console.log('Creating listing type:', listingType);
+      
+      const listingData = {
+        ...formData,
+        userId: user.id,
+        images,
+        createdAt: Date.now(),
+        status: 'active' as const,
+      };
+
+      console.log('Submitting data:', listingData);
+
+      if (listingType === 'rent') {
+        // Validate rent-specific fields
+        if (!formData.rentDetails.costs.rent) {
+          throw new Error('Please enter rental cost');
+        }
+        
+        const result = await createListing('rent', {
+          ...listingData,
+          rentDetails: formData.rentDetails,
+          amenities: formData.amenities,
+        });
+        console.log('Rent listing created:', result);
+      } else {
+        // Validate sell-specific fields
+        if (!formData.sellDetails.price) {
+          throw new Error('Please enter selling price');
+        }
+        
+        const result = await createListing('sell', {
+          ...listingData,
+          sellDetails: formData.sellDetails,
+          builtUpArea: formData.builtUpArea,
+          ageOfProperty: formData.ageOfProperty,
+        });
+        console.log('Sale listing created:', result);
+      }
+
+      alert('Listing created successfully!');
+      navigate(listingType === 'rent' ? '/rent' : '/buy');
+    } catch (error) {
+      console.error('Error creating listing:', error);
+      alert(error instanceof Error ? error.message : 'Failed to create listing. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -645,8 +705,12 @@ const AddListingPage = () => {
             </div>
           </section>
 
-          <button type="submit" className="w-full btn btn-primary">
-            Post {listingType === 'rent' ? 'Rental' : 'Sale'} Listing
+          <button 
+            type="submit" 
+            disabled={isSubmitting}
+            className={`w-full btn btn-primary ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            {isSubmitting ? 'Creating Listing...' : `Post ${listingType === 'rent' ? 'Rental' : 'Sale'} Listing`}
           </button>
         </form>
       </div>
