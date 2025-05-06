@@ -111,17 +111,33 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
 }
 
 export async function getListings(type: 'rent' | 'sell', filters?: any) {
-  const collection = type === 'rent' ? rentCollection : sellCollection;
-  let q = query(collection, where('status', '==', 'active'));
-  
-  // Add more query filters based on the filters parameter
-  if (filters) {
-    // Example: if (filters.city) q = query(q, where('address.city', '==', filters.city));
+  try {
+    const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
+    let q = query(collectionRef, where('status', '==', 'active'));
+    
+    // Add filters if they exist
+    if (filters) {
+      if (filters.priceMin) {
+        q = query(q, where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '>=', filters.priceMin));
+      }
+      if (filters.priceMax) {
+        q = query(q, where(type === 'rent' ? 'rentDetails.costs.rent' : 'sellDetails.price', '<=', filters.priceMax));
+      }
+      if (filters.propertyType) {
+        q = query(q, where('propertyType', '==', filters.propertyType));
+      }
+      if (filters.location) {
+        q = query(q, where('address.city', '==', filters.location));
+      }
+    }
+    
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error fetching listings:', error);
+    throw error;
   }
-  
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  }));
 }
