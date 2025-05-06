@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Building, Key, Wrench } from 'lucide-react';
+import { Home, Building, Key, Users, Wrench } from 'lucide-react';
 
 const HeroBanner = () => {
   return (
-    <div className="relative bg-gradient-to-br from-primary-800 to-primary-900 text-white">
+    <div className="relative bg-gradient-to-r from-primary-600 to-primary-800 text-white py-16 md:py-24">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <img 
@@ -14,7 +14,7 @@ const HeroBanner = () => {
         />
       </div>
       
-      <div className="container relative py-12 md:py-16">
+      <div className="container relative">
         <div className="max-w-lg">
           <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">
             Find Your Perfect Home
@@ -23,7 +23,7 @@ const HeroBanner = () => {
             Your dream property is just a search away
           </p>
           
-          <div className="grid grid-cols-2 gap-3 mb-8">
+          <div className="grid grid-cols-3 gap-3 mb-8">
             <Link 
               to="/buy" 
               className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-2 px-4 rounded-md font-medium transition"
@@ -32,10 +32,17 @@ const HeroBanner = () => {
               Buy
             </Link>
             <Link 
-              to="/rent" 
-              className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-3 px-6 rounded-md font-medium transition"
+              to="/find-friends" 
+              className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-2 px-4 rounded-md font-medium transition"
             >
-              <Key className="w-5 h-5 mr-2" />
+              <Users className="w-4 h-4 mr-2" />
+              Find Friends
+            </Link>
+            <Link 
+              to="/rent" 
+              className="flex items-center justify-center bg-white text-primary-700 hover:bg-gray-100 py-2 px-4 rounded-md font-medium transition"
+            >
+              <Key className="w-4 h-4 mr-2" />
               Rent
             </Link>
           </div>

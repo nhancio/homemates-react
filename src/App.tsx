@@ -8,6 +8,7 @@ import HomeServicesPage from './pages/HomeServicesPage';
 import ProfilePage from './pages/ProfilePage';
 import AddListingPage from './pages/AddListingPage';
 import SavedPage from './pages/SavedPage';
+import FindFriendsPage from './pages/FindFriendsPage';
 import { AppContextProvider } from './context/AppContext';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="saved" element={<SavedPage />} />
           <Route path="r/:propertyId" element={<RentPropertiesPage />} />
           <Route path="s/:propertyId" element={<BuyPropertiesPage />} />
+          <Route path="find-friends" element={<FindFriendsPage />} />
         </Route>
       </Routes>
     </AppContextProvider>

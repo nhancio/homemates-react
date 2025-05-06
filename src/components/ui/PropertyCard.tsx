@@ -30,19 +30,28 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   
   const handleShare = async () => {
     const url = getShareableUrl(property.id, property.listingType);
+    const price = property.listingType === 'rent' 
+      ? property.rentDetails?.costs?.rent 
+      : property.sellDetails?.price;
     
+    const shareText = 
+`Hey, check this property on Homemates!
+Name: ${property.address?.buildingName || 'Property'}
+${property.listingType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
+Type: ${property.propertyType || property.type || '-'}
+Location: ${property.address?.locality}, ${property.address?.city}
+Link: ${url}`;
+
     try {
       if (navigator.share) {
         await navigator.share({
-          title: property.title || 'Check out this property',
-          text: property.description || 'Found this great property on Homemates',
+          title: 'Check out this property on Homemates',
+          text: shareText,
           url: url
         });
       } else {
-        // Fallback to clipboard copy
-        await navigator.clipboard.writeText(url);
-        // You might want to show a toast notification here
-        alert('Link copied to clipboard!');
+        await navigator.clipboard.writeText(shareText);
+        alert('Property details copied to clipboard!');
       }
     } catch (err) {
       console.error('Error sharing property:', err);
