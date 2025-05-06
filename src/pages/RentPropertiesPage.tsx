@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropertyFilters from '../components/filters/PropertyFilters';
 import PropertyCard from '../components/ui/PropertyCard';
 import { Building, Loader } from 'lucide-react';
@@ -13,6 +14,7 @@ const propertyTypes = [
 ];
 
 const RentPropertiesPage = () => {
+  const navigate = useNavigate();
   const [properties, setProperties] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +36,10 @@ const RentPropertiesPage = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePropertyClick = (propertyId: string) => {
+    navigate(`/rent/property/${propertyId}`);
   };
   
   useEffect(() => {
@@ -79,7 +85,8 @@ const RentPropertiesPage = () => {
             <PropertyCard 
               key={property.id} 
               property={property}
-              listingType="rent" // Add this prop
+              listingType="rent"
+              onClick={() => handlePropertyClick(property.id)}
             />
           ))}
         </div>
