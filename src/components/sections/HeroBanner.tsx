@@ -1,8 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, Users, Key } from 'lucide-react';
+import { Home, Users, Key, X } from 'lucide-react';
 
 const HeroBanner = () => {
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showPopup) {
+      timer = setTimeout(() => {
+        setShowPopup(false);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [showPopup]);
+
+  const handleServicesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowPopup(true);
+  };
+
   return (
     <section className="relative py-8">
       {/* Full Background Image */}
@@ -23,32 +40,57 @@ const HeroBanner = () => {
             Your dream property is just a click away
           </p>
           
-          {/* Mobile-responsive button grid - Updated for 2x2 layout on mobile */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg mx-auto">
+          {/* Mobile-responsive button grid - Updated for rectangular buttons */}
+          <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto px-4">
             <Link 
               to="/rent" 
-              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-4 sm:p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+              className="flex flex-col items-center justify-center bg-[#FF4E8E] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
             >
-              <Key className="w-6 h-6 sm:w-8 sm:h-8 mb-2" />
-              <span className="text-sm sm:text-base">Rent</span>
+              <Key className="w-6 h-6 sm:w-8 sm:h-8" />
+              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Rent</span>
+            </Link>
+            <Link 
+              to="/buy"
+              className="flex flex-col items-center justify-center bg-[#FFA5B8] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
+            >
+              <Home className="w-6 h-6 sm:w-8 sm:h-8" />
+              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Buy</span>
             </Link>
             <Link 
               to="/users"
-              className="aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-4 sm:p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+              className="flex flex-col items-center justify-center bg-[#D84C89] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
             >
-              <Users className="w-6 h-6 sm:w-8 sm:h-8 mb-2" />
-              <span className="text-sm sm:text-base">Find Friends</span>
+              <Users className="w-6 h-6 sm:w-8 sm:h-8" />
+              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Find Friends</span>
             </Link>
-            <Link 
-              to="/buy" 
-              className="col-span-2 sm:col-span-1 aspect-square flex flex-col items-center justify-center bg-white text-gray-800 hover:bg-gray-100 p-4 sm:p-6 rounded-lg font-medium transition shadow-lg hover:shadow-xl"
+            <button
+              onClick={handleServicesClick}
+              className="flex flex-col items-center justify-center bg-[#DBA6CF] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
             >
-              <Home className="w-6 h-6 sm:w-8 sm:h-8 mb-2" />
-              <span className="text-sm sm:text-base">Buy</span>
-            </Link>
+              <Home className="w-6 h-6 sm:w-8 sm:h-8" />
+              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Services</span>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Coming Soon Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-8 max-w-sm mx-4 relative">
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-xl font-semibold mb-2">Coming Soon!</h3>
+            <p className="text-gray-600">
+              We're working hard to bring you amazing home services. Stay tuned!
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
