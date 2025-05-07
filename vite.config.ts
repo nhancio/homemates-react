@@ -7,19 +7,19 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['images/homemates-logo.jpeg'],
+      includeAssets: ['images/homemates-logo.png'],
       manifest: {
         name: 'Homemates',
         short_name: 'Homemates',
         theme_color: '#C2185B',
         icons: [
           {
-            src: '/images/homemates-logo.jpeg',
+            src: '/images/homemates-logo.png',
             sizes: '192x192',
             type: 'image/jpeg'
           },
           {
-            src: '/images/homemates-logo.jpeg',
+            src: '/images/homemates-logo.png',
             sizes: '512x512',
             type: 'image/jpeg'
           }
