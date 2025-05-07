@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 import { createListing } from '../services/listings';
 
 const PROPERTY_TYPES = ['Apartment', 'Villa', 'Independent House', 'Gated Community'];
-const CITY_OPTIONS = ['Hyderabad', 'Bangalore', 'Others'];
+const CITY_OPTIONS = ['Hyderabad', 'Bangalore', 'Mumbai', 'Ahmedabad', 'Gandhinagar', 'Rajkot', 'Others'];
 const DIRECTIONS = ['East Facing', 'West Facing', 'North Facing', 'South Facing'];
 const OWNERSHIP_TYPES = ['Freehold', 'Leasehold', 'Power of Attorney'];
 const WATER_SUPPLY = ['Municipal', 'Borewell', 'Both'];
