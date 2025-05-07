@@ -28,7 +28,7 @@ const PWAInstallPrompt = () => {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-16 right-4 w-64 bg-white rounded-lg shadow-lg p-3 z-50">
+    <div className="fixed left-1/2 bottom-20 -translate-x-1/2 w-64 bg-white rounded-lg shadow-lg p-3 z-50">
       <button 
         onClick={() => setShowPrompt(false)}
         className="absolute top-1 right-1 text-gray-500 hover:text-gray-700"
