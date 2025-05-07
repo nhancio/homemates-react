@@ -1,6 +1,6 @@
 export function getShareableUrl(propertyId: string, type: 'rent' | 'sell'): string {
   const baseUrl = import.meta.env.PROD 
-    ? 'https://homematesapp.netlify.app'
+    ? 'https://homematesapp.in'
     : window.location.origin;
 
   // Always use 'rent' for rent listings and 'buy' for sell listings
