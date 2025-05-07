@@ -18,6 +18,8 @@ const Layout = () => {
       </main>
       <Footer />
       <MobileNav />
+      <PWAInstallPrompt />
+      {showPreferences && <PreferencesModal />}
     </div>
   );
 };
