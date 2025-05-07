@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Home, Users, Key, X } from 'lucide-react';
+import { useAppContext } from '../../context/AppContext';
 
 const HeroBanner = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
+  const { setFilters } = useAppContext();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (showPopup) {
       timer = setTimeout(() => {
         setShowPopup(false);
-      }, 1000);
+      }, 3000);
     }
     return () => clearTimeout(timer);
   }, [showPopup]);
@@ -18,6 +21,17 @@ const HeroBanner = () => {
   const handleServicesClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowPopup(true);
+  };
+
+  const handlePropertyTypeClick = (type: string, listingType: 'rent' | 'buy') => {
+    setFilters(prev => ({
+      ...prev,
+      [listingType]: {
+        ...prev[listingType],
+        propertyType: type
+      }
+    }));
+    navigate(`/${listingType}`);
   };
 
   return (
@@ -70,6 +84,20 @@ const HeroBanner = () => {
               <Home className="w-6 h-6 sm:w-8 sm:h-8" />
               <span className="text-xs sm:text-sm mt-1 sm:mt-2">Services</span>
             </button>
+          </div>
+
+          {/* Property Filtering Buttons */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+            <button onClick={() => handlePropertyTypeClick('Villa', 'buy')} className="filter-btn">Villa</button>
+            <button onClick={() => handlePropertyTypeClick('Gated Community', 'buy')} className="filter-btn">Gated</button>
+            <button onClick={() => handlePropertyTypeClick('Independent House', 'buy')} className="filter-btn">Independent</button>
+            <button onClick={() => handlePropertyTypeClick('Flat', 'buy')} className="filter-btn">Flat</button>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+            <button onClick={() => handlePropertyTypeClick('1 BHK', 'rent')} className="filter-btn">Single Room</button>
+            <button onClick={() => handlePropertyTypeClick('2 BHK', 'rent')} className="filter-btn">2 BHK</button>
+            <button onClick={() => handlePropertyTypeClick('3 BHK', 'rent')} className="filter-btn">3 BHK</button>
+            <button onClick={() => handlePropertyTypeClick('4 BHK', 'rent')} className="filter-btn">4 BHK</button>
           </div>
         </div>
       </div>

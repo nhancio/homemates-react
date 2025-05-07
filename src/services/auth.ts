@@ -1,5 +1,6 @@
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../config/firebase';
+import { createOrUpdateUser } from './users';
 
 export const signInWithGoogle = async () => {
   try {
@@ -8,6 +9,13 @@ export const signInWithGoogle = async () => {
     googleProvider.addScope('profile');
     googleProvider.addScope('email');
     
+    // Create/Update user in 'u' collection
+    const userResult = await createOrUpdateUser({
+      email: result.user.email || '',
+      name: result.user.displayName || '',
+      userId: result.user.uid
+    });
+
     // Get profile photo URL from Google Auth
     const photoURL = result.user.photoURL || '';
 
@@ -20,7 +28,7 @@ export const signInWithGoogle = async () => {
         isPremium: false
       },
       success: true,
-      isNewUser: result.additionalUserInfo?.isNewUser || false
+      isNewUser: userResult.isNewUser
     };
   } catch (error) {
     console.error('Error signing in with Google:', error);

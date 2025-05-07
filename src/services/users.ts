@@ -1,4 +1,4 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 
 export interface UserProfile {
@@ -46,3 +46,38 @@ export async function getUsers(): Promise<UserProfile[]> {
     throw error;
   }
 }
+
+export const createOrUpdateUser = async (userData: {
+  email: string;
+  name: string;
+  userId: string;
+}) => {
+  try {
+    // Check if user exists
+    const usersRef = collection(db, 'u');
+    const q = query(usersRef, where('email', '==', userData.email));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      // Create new user
+      const userRef = doc(db, 'u', userData.userId);
+      await setDoc(userRef, {
+        email: userData.email,
+        name: userData.name,
+        createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString()
+      });
+      return { isNewUser: true };
+    } else {
+      // Update last login
+      const existingUser = querySnapshot.docs[0];
+      await setDoc(doc(db, 'u', existingUser.id), {
+        lastLoginAt: new Date().toISOString()
+      }, { merge: true });
+      return { isNewUser: false };
+    }
+  } catch (error) {
+    console.error('Error managing user:', error);
+    throw error;
+  }
+};

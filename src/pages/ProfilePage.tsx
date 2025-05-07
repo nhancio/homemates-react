@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User, MapPin, Phone, Mail, Heart, Award, Settings, Clock, LogOut } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Heart, Award, Settings, Clock, LogOut, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import PropertyCard from '../components/ui/PropertyCard';
 import { getMockProperties } from '../data/properties';
 
 const ProfilePage = () => {
   const { user, isAuthenticated, favoriteProperties, login, logout } = useAppContext();
-  
+  const [showUpgradePopup, setShowUpgradePopup] = useState(false);
+
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
@@ -28,6 +29,12 @@ const ProfilePage = () => {
   const userFavorites = getMockProperties().filter(property => 
     favoriteProperties.includes(property.id)
   );
+
+  const handleUpgradeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowUpgradePopup(true);
+    setTimeout(() => setShowUpgradePopup(false), 2000);
+  };
   
   if (!isAuthenticated) {
     return (
@@ -122,11 +129,29 @@ const ProfilePage = () => {
                 </p>
               </div>
               <Link
-                to="/premium"
+                to="#"
+                onClick={handleUpgradeClick}
                 className="bg-white text-accent-600 hover:bg-gray-100 px-6 py-2 rounded-md font-medium transition"
               >
                 Upgrade Now
               </Link>
+            </div>
+          </div>
+        )}
+        
+        {showUpgradePopup && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl p-8 max-w-sm mx-4 relative">
+              <button
+                onClick={() => setShowUpgradePopup(false)}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <h3 className="text-xl font-semibold mb-2">Coming Soon!</h3>
+              <p className="text-gray-600">
+                We are curating amazing experiences for you, please stay tuned!
+              </p>
             </div>
           </div>
         )}
