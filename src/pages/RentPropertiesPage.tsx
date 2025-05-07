@@ -39,7 +39,7 @@ const RentPropertiesPage = () => {
   };
 
   const handlePropertyClick = (propertyId: string) => {
-    navigate(`/rent/property/${propertyId}`);
+    navigate(`/rent/${propertyId}`);
   };
   
   useEffect(() => {

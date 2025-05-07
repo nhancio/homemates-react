@@ -27,9 +27,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType }) =>
     setIsLoaded(true);
   };
   
-  const handleCall = () => {
+  const handleCall = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop event bubbling
     if (property.contactNumber) {
-      // Create a clickable tel: link
       const tel = `tel:${property.contactNumber}`;
       window.location.href = tel;
     } else {
@@ -37,17 +37,19 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType }) =>
     }
   };
   
-  const handleShare = async () => {
-    const shareUrl = property.listingType === 'rent' ? `/rent/${property.id}` : `/buy/${property.id}`;
-    const url = getShareableUrl(property.id, property.listingType);
-    const price = property.listingType === 'rent' 
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop event bubbling
+    const propertyType = listingType ?? (property.listingType === 'rent' ? 'rent' : 'sell');
+    const url = getShareableUrl(property.id, propertyType);
+    
+    const price = propertyType === 'rent' 
       ? property.rentDetails?.costs?.rent 
       : property.sellDetails?.price;
     
     const shareText = 
 `Hey, check this property on Homemates!
 Name: ${property.address?.buildingName || 'Property'}
-${property.listingType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
+${propertyType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
 Type: ${property.propertyType || property.type || '-'}
 Location: ${property.address?.locality}, ${property.address?.city}`;
 
@@ -67,10 +69,13 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
     }
   };
 
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop event bubbling
+    toggleFavorite(property.id);
+  };
+
   const handleCardClick = () => {
-    // Use either the passed listingType prop or determine from property data
-    const propertyType = listingType || property.listingType;
-    const path = propertyType === 'rent' ? `/rent/${property.id}` : `/buy/${property.id}`;
+    const path = property.listingType === 'rent' ? `/rent/${property.id}` : `/buy/${property.id}`;
     console.log('Navigating to:', path, 'Property:', property);
     navigate(path);
   };
@@ -153,7 +158,7 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
       {/* Action Bar */}
       <div className="flex border-t border-gray-200">
         <button 
-          onClick={() => toggleFavorite(property.id)}
+          onClick={handleFavoriteClick}
           className="flex items-center justify-center w-1/3 py-3 hover:bg-gray-50 transition"
           aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
         >
