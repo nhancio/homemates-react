@@ -76,31 +76,23 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
       throw new Error('User must be authenticated to create a listing');
     }
 
-    // Sanitize the data to ensure all fields exist
-    const sanitizedData = {
+    // Ensure we're using the correct collection
+    const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
+
+    // Clean data before saving
+    const cleanData = {
       ...data,
       createdAt: Date.now(),
       status: 'active' as const,
       userId: user.uid, // Ensure userId is set from authenticated user
+      listingType: type // Add this to help with frontend routing
     };
-
-    // Remove any undefined or null values and empty arrays/objects
-    const cleanData = Object.entries(sanitizedData).reduce((acc, [key, value]) => {
-      if (value != null && 
-          !(Array.isArray(value) && value.length === 0) &&
-          !(typeof value === 'object' && Object.keys(value).length === 0)) {
-        acc[key] = value;
-      }
-      return acc;
-    }, {});
 
     console.log('Creating listing with data:', cleanData);
     console.log('Collection:', type === 'rent' ? 'r' : 's');
 
-    // Use correct collection names - 'r' for rent and 's' for sell
-    const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
     const docRef = await addDoc(collectionRef, cleanData);
-    
+
     console.log('Document written with ID:', docRef.id);
     return { success: true, id: docRef.id };
   } catch (error) {
@@ -115,21 +107,21 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
 export async function getListings(type: 'rent' | 'sell', filters?: any) {
   try {
     console.log('Getting listings for type:', type, 'with filters:', filters);
-    // Use correct collection names - 'r' for rent and 's' for sell
+    // Use r for rent and s for sell collections
     const collectionRef = collection(db, type === 'rent' ? 'r' : 's');
-    
+
     // Start with base query
     let baseQuery = query(collectionRef);
-    
+
     // Add status filter
     baseQuery = query(baseQuery, where('status', '==', 'active'));
-    
+
     // Add other filters if they exist
     if (filters) {
       if (filters.propertyType) {
         baseQuery = query(baseQuery, where('propertyType', '==', filters.propertyType));
       }
-      
+
       // Add other filters as needed...
     }
 
@@ -149,10 +141,10 @@ export async function getListings(type: 'rent' | 'sell', filters?: any) {
     if (filters) {
       if (filters.priceMin || filters.priceMax) {
         filteredListings = filteredListings.filter(listing => {
-          const price = type === 'rent' 
-            ? listing.rentDetails?.costs?.rent 
+          const price = type === 'rent'
+            ? listing.rentDetails?.costs?.rent
             : listing.sellDetails?.price;
-          
+
           if (filters.priceMin && price < Number(filters.priceMin)) return false;
           if (filters.priceMax && price > Number(filters.priceMax)) return false;
           return true;

@@ -8,15 +8,15 @@ import 'swiper/css/pagination';
 import { useAppContext } from '../../context/AppContext';
 import { Property } from '../../types/property';
 import { formatCurrency } from '../../utils/format';
-import { getShareableUrl } from '../../utils/share';
 import { useNavigate } from 'react-router-dom';
+import { getShareableUrl } from '../../utils/share';
 
 interface PropertyCardProps {
   property: Property;
-  listingType?: 'rent' | 'buy'; // Add this prop
+  listingType?: 'rent' | 'buy';
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType = 'rent' }) => {
   const { favoriteProperties, toggleFavorite } = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
@@ -38,18 +38,19 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType }) =>
   };
   
   const handleShare = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop event bubbling
-    const propertyType = listingType ?? (property.listingType === 'rent' ? 'rent' : 'sell');
-    const url = getShareableUrl(property.id, propertyType);
+    e.stopPropagation();
+    // For share URL: rent->rent, buy->sell
+    const type = listingType === 'buy' ? 'sell' : 'rent';
+    const url = getShareableUrl(property.id, type);
     
-    const price = propertyType === 'rent' 
+    const price = listingType === 'rent' 
       ? property.rentDetails?.costs?.rent 
       : property.sellDetails?.price;
     
     const shareText = 
 `Hey, check this property on Homemates!
 Name: ${property.address?.buildingName || 'Property'}
-${propertyType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
+${listingType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
 Type: ${property.propertyType || property.type || '-'}
 Location: ${property.address?.locality}, ${property.address?.city}`;
 
@@ -75,8 +76,8 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
   };
 
   const handleCardClick = () => {
-    const path = property.listingType === 'rent' ? `/rent/${property.id}` : `/buy/${property.id}`;
-    console.log('Navigating to:', path, 'Property:', property);
+    // For navigation: use listingType directly (buy->buy, rent->rent)
+    const path = `/${listingType}/${property.id}`;
     navigate(path);
   };
   
