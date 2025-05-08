@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Home, Users, Key, X } from 'lucide-react';
+import { Home, Users, Key, X, Wrench } from 'lucide-react'; // Add Wrench to imports
 import { useAppContext } from '../../context/AppContext';
 
 const HeroBanner = () => {
@@ -18,7 +18,7 @@ const HeroBanner = () => {
     return () => clearTimeout(timer);
   }, [showPopup]);
 
-  const handleServicesClick = (e: React.MouseEvent) => {
+  const handleComingSoonClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowPopup(true);
   };
@@ -47,8 +47,8 @@ const HeroBanner = () => {
       {/* Content Overlay */}
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Find Your Perfect Home & Flatmates
+          <h1 className="text-2xl md:text-4xl font-bold mb-6">
+            Find Your Perfect Home with Homemates
           </h1>
           <p className="text-xl mb-12">
             Your dream property is just a click away
@@ -70,18 +70,18 @@ const HeroBanner = () => {
               <Home className="w-6 h-6 sm:w-8 sm:h-8" />
               <span className="text-xs sm:text-sm mt-1 sm:mt-2">Buy</span>
             </Link>
-            <Link 
-              to="/users"
+            <button 
+              onClick={handleComingSoonClick}
               className="flex flex-col items-center justify-center bg-[#D84C89] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
             >
               <Users className="w-6 h-6 sm:w-8 sm:h-8" />
               <span className="text-xs sm:text-sm mt-1 sm:mt-2">Find Friends</span>
-            </Link>
+            </button>
             <button
-              onClick={handleServicesClick}
+              onClick={handleComingSoonClick}
               className="flex flex-col items-center justify-center bg-[#DBA6CF] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
             >
-              <Home className="w-6 h-6 sm:w-8 sm:h-8" />
+              <Wrench className="w-6 h-6 sm:w-8 sm:h-8" /> {/* Changed from Home to Wrench */}
               <span className="text-xs sm:text-sm mt-1 sm:mt-2">Services</span>
             </button>
           </div>
@@ -114,7 +114,7 @@ const HeroBanner = () => {
             </button>
             <h3 className="text-xl font-semibold mb-2">Coming Soon!</h3>
             <p className="text-gray-600">
-              We're working hard to bring you amazing home services. Stay tuned!
+              We're brewing some cool features for you! Stay tuned for updates.
             </p>
           </div>
         </div>
