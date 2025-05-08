@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { User, MapPin, Phone, Mail, Heart, Award, Settings, Clock, LogOut, X } from 'lucide-react';
+import { User, MapPin, Phone, Mail, Award, Settings, LogOut, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
-import PropertyCard from '../components/ui/PropertyCard';
-import { getMockProperties } from '../data/properties';
 
 const ProfilePage = () => {
-  const { user, isAuthenticated, favoriteProperties, login, logout } = useAppContext();
+  const { user, isAuthenticated, login, logout } = useAppContext();
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
 
   useEffect(() => {
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
-    
-    // Update page title
     document.title = 'My Profile | Homemates';
   }, []);
-  
+
   // Simulate a user if none is authenticated
   const profileUser = user || {
     id: 'mock-user-1',
@@ -24,18 +18,13 @@ const ProfilePage = () => {
     email: 'john.doe@example.com',
     isPremium: false
   };
-  
-  // Get favorite properties
-  const userFavorites = getMockProperties().filter(property => 
-    favoriteProperties.includes(property.id)
-  );
 
   const handleUpgradeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowUpgradePopup(true);
     setTimeout(() => setShowUpgradePopup(false), 2000);
   };
-  
+
   if (!isAuthenticated) {
     return (
       <div className="py-20">
@@ -128,13 +117,12 @@ const ProfilePage = () => {
                   Get exclusive access to premium listings, priority support, and more!
                 </p>
               </div>
-              <Link
-                to="#"
+              <button
                 onClick={handleUpgradeClick}
                 className="bg-white text-accent-600 hover:bg-gray-100 px-6 py-2 rounded-md font-medium transition"
               >
                 Upgrade Now
-              </Link>
+              </button>
             </div>
           </div>
         )}
@@ -155,34 +143,6 @@ const ProfilePage = () => {
             </div>
           </div>
         )}
-        
-        {/* Saved Properties */}
-        <div className="mt-8">
-          <div className="flex items-center mb-6">
-            <Heart className="w-5 h-5 text-primary-600 mr-2" />
-            <h2 className="text-xl font-bold">Saved Properties</h2>
-          </div>
-          
-          {userFavorites.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {userFavorites.map(property => (
-                <PropertyCard key={property.id} property={property} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-gray-50 rounded-lg">
-              <Heart className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-xl font-semibold mb-2">No saved properties yet</h3>
-              <p className="text-gray-600 mb-6">
-                Start exploring and save properties that catch your interest.
-              </p>
-              <div className="flex justify-center gap-4">
-                <Link to="/buy" className="btn btn-primary">Buy Properties</Link>
-                <Link to="/rent" className="btn btn-secondary">Rent Properties</Link>
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

@@ -3,24 +3,46 @@ import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import PropertyCard from '../components/ui/PropertyCard';
-import { getMockProperties } from '../data/properties';
+import { getListingsByIds } from '../services/listings';
 
 const SavedPage = () => {
-  const { favoriteProperties } = useAppContext();
+  const { favoriteProperties, user } = useAppContext();
   const [activeFilter, setActiveFilter] = useState('all');
+  const [savedProperties, setSavedProperties] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = 'Saved Properties | Homemates';
   }, []);
   
-  const allSavedProperties = getMockProperties().filter(property => 
-    favoriteProperties.includes(property.id)
-  );
+  useEffect(() => {
+    const fetchSavedProperties = async () => {
+      if (!user || !favoriteProperties.length) {
+        setSavedProperties([]);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const properties = await getListingsByIds(favoriteProperties);
+        setSavedProperties(properties);
+      } catch (error) {
+        console.error('Error fetching saved properties:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSavedProperties();
+  }, [favoriteProperties, user]);
   
   const filteredProperties = activeFilter === 'all' 
-    ? allSavedProperties
-    : allSavedProperties.filter(property => property.listingType === activeFilter);
+    ? savedProperties
+    : savedProperties.filter(property => {
+        const displayType = property.listingType === 'sell' ? 'buy' : property.listingType;
+        return displayType === activeFilter;
+      });
   
   return (
     <div className="py-8">
@@ -61,10 +83,18 @@ const SavedPage = () => {
           </button>
         </div>
         
-        {filteredProperties.length > 0 ? (
+        {isLoading ? (
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <p className="text-gray-600">Loading saved properties...</p>
+          </div>
+        ) : filteredProperties.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProperties.map(property => (
-              <PropertyCard key={property.id} property={property} />
+              <PropertyCard 
+                key={property.id} 
+                property={property} 
+                listingType={property.listingType === 'sell' ? 'buy' : 'rent'}
+              />
             ))}
           </div>
         ) : (
@@ -85,4 +115,4 @@ const SavedPage = () => {
   );
 };
 
-export default SavedPage
+export default SavedPage;

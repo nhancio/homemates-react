@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, doc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 
 export interface UserProfile {
@@ -81,3 +81,39 @@ export const createOrUpdateUser = async (userData: {
     throw error;
   }
 };
+
+export async function updateUserFavorites(userId: string, propertyId: string, isFavorite: boolean) {
+  try {
+    const userRef = doc(db, 'u', userId);
+    
+    if (isFavorite) {
+      // Add to favorites
+      await setDoc(userRef, {
+        favorites: arrayUnion(propertyId)
+      }, { merge: true });
+    } else {
+      // Remove from favorites
+      await setDoc(userRef, {
+        favorites: arrayRemove(propertyId)
+      }, { merge: true });
+    }
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating favorites:', error);
+    throw error;
+  }
+}
+
+export async function getUserFavorites(userId: string): Promise<string[]> {
+  try {
+    const userDoc = await getDoc(doc(db, 'u', userId));
+    if (userDoc.exists()) {
+      return userDoc.data()?.favorites || [];
+    }
+    return [];
+  } catch (error) {
+    console.error('Error getting favorites:', error);
+    return [];
+  }
+}

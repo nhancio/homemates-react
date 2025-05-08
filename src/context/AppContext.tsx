@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { signInWithGoogle, logoutUser } from '../services/auth';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { signInWithGoogle, logoutUser, getUserFavorites } from '../services/auth';
 
 type BaseFilters = {
   priceMin: number;
@@ -83,14 +83,22 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
   const [showPreferences, setShowPreferences] = useState(false);
 
   const login = async () => {
-    const result = await signInWithGoogle();
-    if (result.success && result.user) {
-      setUser(result.user);
-      // Save user to localStorage
-      localStorage.setItem('user', JSON.stringify(result.user));
-      if (result.isNewUser) {
-        setShowPreferences(true);
+    try {
+      const result = await signInWithGoogle();
+      if (result.success && result.user) {
+        setUser(result.user);
+        // Save user to localStorage
+        localStorage.setItem('user', JSON.stringify(result.user));
+        if (result.isNewUser) {
+          setShowPreferences(true);
+        }
+        // Optional: redirect to home page
+        window.location.href = '/';
+      } else {
+        console.error('Login failed:', result);
       }
+    } catch (error) {
+      console.error('Login error:', error);
     }
   };
 
@@ -103,15 +111,28 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const toggleFavorite = (propertyId: string) => {
+  const toggleFavorite = async (propertyId: string) => {
+    if (!user) return;
+
     setFavoriteProperties(prev => {
-      if (prev.includes(propertyId)) {
-        return prev.filter(id => id !== propertyId);
-      } else {
-        return [...prev, propertyId];
-      }
+      const newFavorites = prev.includes(propertyId)
+        ? prev.filter(id => id !== propertyId)
+        : [...prev, propertyId];
+        
+      return newFavorites;
     });
   };
+
+  useEffect(() => {
+    const loadFavorites = async () => {
+      if (user) {
+        const favorites = await getUserFavorites(user.id);
+        setFavoriteProperties(favorites);
+      }
+    };
+    
+    loadFavorites();
+  }, [user]);
 
   const value = {
     user,

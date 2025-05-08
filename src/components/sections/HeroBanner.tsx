@@ -35,7 +35,7 @@ const HeroBanner = () => {
   };
 
   return (
-    <section className="relative py-8">
+    <section className="h-full relative flex items-center justify-center overflow-hidden">
       {/* Full Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:bg-black before:opacity-40"
@@ -47,10 +47,10 @@ const HeroBanner = () => {
       {/* Content Overlay */}
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto text-white">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">
             Find Your Perfect Home & Flatmates
           </h1>
-          <p className="text-lg mb-8">
+          <p className="text-xl mb-12">
             Your dream property is just a click away
           </p>
           
@@ -86,8 +86,8 @@ const HeroBanner = () => {
             </button>
           </div>
 
-          {/* Property Filtering Buttons */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+          {/* Property Filtering Buttons - Temporarily Disabled */}
+          {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
             <button onClick={() => handlePropertyTypeClick('Villa', 'buy')} className="filter-btn">Villa</button>
             <button onClick={() => handlePropertyTypeClick('Gated Community', 'buy')} className="filter-btn">Gated</button>
             <button onClick={() => handlePropertyTypeClick('Independent House', 'buy')} className="filter-btn">Independent</button>
@@ -98,7 +98,7 @@ const HeroBanner = () => {
             <button onClick={() => handlePropertyTypeClick('2 BHK', 'rent')} className="filter-btn">2 BHK</button>
             <button onClick={() => handlePropertyTypeClick('3 BHK', 'rent')} className="filter-btn">3 BHK</button>
             <button onClick={() => handlePropertyTypeClick('4 BHK', 'rent')} className="filter-btn">4 BHK</button>
-          </div>
+          </div> */}
         </div>
       </div>
 

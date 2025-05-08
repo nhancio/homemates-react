@@ -187,3 +187,38 @@ export async function getPropertyById(type: 'rent' | 'sell', id: string) {
     throw error;
   }
 }
+
+export async function getListingsByIds(ids: string[]) {
+  try {
+    if (!ids.length) return [];
+
+    // Fetch from both collections
+    const rentDocs = await getDocs(query(collection(db, 'r'), where('__name__', 'in', ids)));
+    const sellDocs = await getDocs(query(collection(db, 's'), where('__name__', 'in', ids)));
+
+    const rentProperties = rentDocs.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      listingType: 'rent'  // Add listing type
+    }));
+
+    const sellProperties = sellDocs.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      listingType: 'sell'  // Add listing type as 'sell'
+    }));
+
+    // Combine and maintain order
+    const allProperties = [...rentProperties, ...sellProperties];
+    const orderedProperties = ids
+      .map(id => allProperties.find(prop => prop.id === id))
+      .filter(Boolean);
+
+    console.log('Retrieved properties:', orderedProperties.length);
+    return orderedProperties;
+
+  } catch (error) {
+    console.error('Error fetching properties by ids:', error);
+    throw error;
+  }
+}

@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import HeroBanner from '../components/sections/HeroBanner';
-import HomeCategories from '../components/sections/HomeCategories';
-// import HomeServices from '../components/sections/HomeServices'; // Comment out services import
 
 const HomePage = () => {
   useEffect(() => {
@@ -10,11 +8,8 @@ const HomePage = () => {
   }, []);
   
   return (
-    <div>
+    <div className="h-[calc(100vh-64px)] flex flex-col">
       <HeroBanner />
-      <div className="mt-8"> {/* Reduced from mt-24 */}
-        <HomeCategories />
-      </div>
     </div>
   );
 };

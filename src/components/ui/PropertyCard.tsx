@@ -10,6 +10,7 @@ import { Property } from '../../types/property';
 import { formatCurrency } from '../../utils/format';
 import { useNavigate } from 'react-router-dom';
 import { getShareableUrl } from '../../utils/share';
+import { updateUserFavorites } from '../../utils/userFavorites';
 
 interface PropertyCardProps {
   property: Property;
@@ -17,7 +18,7 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType = 'rent' }) => {
-  const { favoriteProperties, toggleFavorite } = useAppContext();
+  const { favoriteProperties, toggleFavorite, user } = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   
@@ -70,9 +71,20 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
     }
   };
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop event bubbling
-    toggleFavorite(property.id);
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) {
+      alert('Please login to save properties');
+      return;
+    }
+    
+    try {
+      await updateUserFavorites(user.id, property.id, !isFavorite);
+      toggleFavorite(property.id);
+    } catch (error) {
+      console.error('Error updating favorites:', error);
+      alert('Failed to update favorites. Please try again.');
+    }
   };
 
   const handleCardClick = () => {
@@ -164,7 +176,7 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
           aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
         >
           <Heart className={`w-4 h-4 mr-1 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
-          <span className="text-sm text-black">Wishlist</span>
+          <span className="text-sm text-black">{isFavorite ? 'Saved' : 'Save'}</span>
         </button>
         <button 
           onClick={handleCall}

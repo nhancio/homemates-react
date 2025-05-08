@@ -37,8 +37,6 @@ const Footer = () => {
           
           {/* Quick Links */}
           <div className="flex space-x-6">
-            <Link to="/privacy" className="hover:text-white transition">Privacy</Link>
-            <Link to="/terms" className="hover:text-white transition">Terms</Link>
             <a href="mailto:nithindidigam@gmail.com" className="flex items-center hover:text-white transition">
               <Mail className="w-4 h-4 mr-1" />
               Contact
