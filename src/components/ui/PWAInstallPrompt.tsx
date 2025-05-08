@@ -2,44 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { X, Download } from 'lucide-react';
 
 const PWAInstallPrompt = () => {
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
   useEffect(() => {
-    // Delay showing prompt by 1 second
-    const showDelay = setTimeout(() => {
-      const handler = (e: any) => {
-        e.preventDefault();
-        setInstallPrompt(e);
-        setShowPrompt(true);
-        
-        // Auto hide after 2 seconds
-        setTimeout(() => {
-          setShowPrompt(false);
-        }, 2000);
-      };
+    const handler = (e: Event) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Store the event for later use
+      setDeferredPrompt(e);
+      setShowPrompt(true);
+    };
 
-      window.addEventListener('beforeinstallprompt', handler);
-      // Trigger handler immediately for web browsers
-      if (window.matchMedia('(display-mode: browser)').matches) {
-        handler(new Event('manual-trigger'));
-      }
+    window.addEventListener('beforeinstallprompt', handler);
 
-      return () => {
-        window.removeEventListener('beforeinstallprompt', handler);
-      };
-    }, 1000);
-
-    return () => clearTimeout(showDelay);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
   }, []);
 
   const handleInstall = async () => {
-    if (!installPrompt) return;
-    installPrompt.prompt();
-    const { outcome } = await installPrompt.userChoice;
+    if (!deferredPrompt) return;
+
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+
     if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
       setShowPrompt(false);
+    } else {
+      console.log('User dismissed the install prompt');
     }
+
+    // Clear the deferred prompt
+    setDeferredPrompt(null);
   };
 
   if (!showPrompt) return null;
