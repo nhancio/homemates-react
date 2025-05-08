@@ -35,8 +35,8 @@ const HeroBanner = () => {
   };
 
   return (
-    <section className="h-full relative flex items-center justify-center overflow-hidden">
-      {/* Full Background Image */}
+    <section className="h-full relative flex items-center justify-center overflow-hidden"> {/* Removed min-height and padding */}
+      {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat before:absolute before:inset-0 before:bg-black before:opacity-40"
         style={{
@@ -47,58 +47,43 @@ const HeroBanner = () => {
       {/* Content Overlay */}
       <div className="container relative z-10">
         <div className="text-center max-w-3xl mx-auto text-white">
-          <h1 className="text-2xl md:text-4xl font-bold mb-6">
+          <h1 className="text-lg md:text-3xl font-bold mb-2 md:mb-4"> {/* Reduced text size and margins */}
             Find Your Perfect Home with Homemates
           </h1>
-          <p className="text-xl mb-12">
+          <p className="text-base md:text-lg mb-4 md:mb-8"> {/* Reduced text size and margins */}
             Your dream property is just a click away
           </p>
           
-          {/* Mobile-responsive button grid - Updated for rectangular buttons */}
-          <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto px-4">
+          <div className="grid grid-cols-2 gap-2 max-w-lg mx-auto px-2"> {/* Reduced gaps and padding */}
             <Link 
               to="/rent" 
-              className="flex flex-col items-center justify-center bg-[#FF4E8E] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
+              className="flex flex-col items-center justify-center bg-[#FF4E8E] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
             >
-              <Key className="w-6 h-6 sm:w-8 sm:h-8" />
-              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Rent</span>
+              <Key className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
+              <span className="text-xs mt-1">Rent</span>
             </Link>
             <Link 
               to="/buy"
-              className="flex flex-col items-center justify-center bg-[#FFA5B8] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
+              className="flex flex-col items-center justify-center bg-[#FFA5B8] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
             >
-              <Home className="w-6 h-6 sm:w-8 sm:h-8" />
-              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Buy</span>
+              <Home className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
+              <span className="text-xs mt-1">Buy</span>
             </Link>
             <button 
               onClick={handleComingSoonClick}
-              className="flex flex-col items-center justify-center bg-[#D84C89] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
+              className="flex flex-col items-center justify-center bg-[#D84C89] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
             >
-              <Users className="w-6 h-6 sm:w-8 sm:h-8" />
-              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Find Friends</span>
+              <Users className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
+              <span className="text-xs mt-1">Find Friends</span>
             </button>
             <button
               onClick={handleComingSoonClick}
-              className="flex flex-col items-center justify-center bg-[#DBA6CF] text-white hover:bg-opacity-90 p-2 sm:p-4 rounded-xl font-medium transition shadow hover:shadow-lg h-16 sm:h-24"
+              className="flex flex-col items-center justify-center bg-[#DBA6CF] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
             >
-              <Wrench className="w-6 h-6 sm:w-8 sm:h-8" /> {/* Changed from Home to Wrench */}
-              <span className="text-xs sm:text-sm mt-1 sm:mt-2">Services</span>
+              <Wrench className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
+              <span className="text-xs mt-1">Services</span>
             </button>
           </div>
-
-          {/* Property Filtering Buttons - Temporarily Disabled */}
-          {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
-            <button onClick={() => handlePropertyTypeClick('Villa', 'buy')} className="filter-btn">Villa</button>
-            <button onClick={() => handlePropertyTypeClick('Gated Community', 'buy')} className="filter-btn">Gated</button>
-            <button onClick={() => handlePropertyTypeClick('Independent House', 'buy')} className="filter-btn">Independent</button>
-            <button onClick={() => handlePropertyTypeClick('Flat', 'buy')} className="filter-btn">Flat</button>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
-            <button onClick={() => handlePropertyTypeClick('1 BHK', 'rent')} className="filter-btn">Single Room</button>
-            <button onClick={() => handlePropertyTypeClick('2 BHK', 'rent')} className="filter-btn">2 BHK</button>
-            <button onClick={() => handlePropertyTypeClick('3 BHK', 'rent')} className="filter-btn">3 BHK</button>
-            <button onClick={() => handlePropertyTypeClick('4 BHK', 'rent')} className="filter-btn">4 BHK</button>
-          </div> */}
         </div>
       </div>
 
