@@ -229,10 +229,19 @@ const PropertyDetailsPage = () => {
                     value ? (
                       <div key={key}>
                         <span className="text-gray-600">{key.charAt(0).toUpperCase() + key.slice(1)}</span>
-                        <p className="font-semibold">₹{formatCurrency(value)}</p>
+                        <p className="font-semibold">₹{formatCurrency(Number(value))}</p>
                       </div>
                     ) : null
                   ))}
+                  <div className="col-span-full mt-4 pt-4 border-t">
+                    <span className="text-gray-600">Total Additional Bills</span>
+                    <p className="font-semibold text-lg text-primary-600">
+                      ₹{formatCurrency(
+                        Object.values(property.rentDetails.additionalBills)
+                          .reduce((sum, value) => sum + (Number(value) || 0), 0)
+                      )}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}

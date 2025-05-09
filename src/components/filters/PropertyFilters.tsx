@@ -83,8 +83,8 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({ propertyTypes, listin
           className="input"
         >
           <option value="">Any</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
         </select>
       </div>
       <div>

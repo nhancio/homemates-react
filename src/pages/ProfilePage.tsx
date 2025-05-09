@@ -85,15 +85,12 @@ const ProfilePage = () => {
               <div className="md:ml-6 text-center md:text-left flex-grow">
                 <div className="flex flex-col md:flex-row items-center justify-between">
                   <h1 className="text-2xl font-bold">{profileUser.name}</h1>
-                  <div className="mt-2 md:mt-0">
-                    <button 
-                      onClick={logout}
-                      className="btn btn-primary px-10" // Increased padding from px-8 to px-10
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Logout
-                    </button>
-                  </div>
+                  <button 
+                    onClick={logout}
+                    className="btn btn-primary mt-4 md:mt-0 px-12 text-lg font-medium"
+                  >
+                    Logout
+                  </button>
                 </div>
                 
                 <div className="mt-4 space-y-2">

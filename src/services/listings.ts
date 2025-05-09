@@ -27,8 +27,9 @@ export interface ListingData {
   images: string[];
   createdAt: number;
   userId: string;
+  createdByUser: string;  // Add this field
   status: 'active' | 'inactive';
-  contactNumber: string;  // Add this field
+  contactNumber: string;
 }
 
 export interface RentListing extends ListingData {
@@ -85,6 +86,7 @@ export async function createListing(type: 'rent' | 'sell', data: RentListing | S
       createdAt: Date.now(),
       status: 'active' as const,
       userId: user.uid, // Ensure userId is set from authenticated user
+      createdByUser: user.uid, // Add createdByUser field
       listingType: type // Add this to help with frontend routing
     };
 

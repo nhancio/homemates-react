@@ -54,34 +54,30 @@ const HeroBanner = () => {
             Your dream property is just a click away
           </p>
           
-          <div className="grid grid-cols-2 gap-2 max-w-lg mx-auto px-2"> {/* Reduced gaps and padding */}
+          <div className="grid grid-cols-2 gap-2 max-w-lg mx-auto px-2">
             <Link 
               to="/rent" 
-              className="flex flex-col items-center justify-center bg-[#FF4E8E] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
+              className="flex items-center justify-center bg-[#FF4E8E] text-white hover:bg-opacity-90 p-2 rounded-xl font-bold transition shadow hover:shadow-lg h-14 sm:h-20"
             >
-              <Key className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
-              <span className="text-xs mt-1">Rent</span>
+              <span className="text-base sm:text-lg">Rent</span>
             </Link>
             <Link 
               to="/buy"
-              className="flex flex-col items-center justify-center bg-[#FFA5B8] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
+              className="flex items-center justify-center bg-[#FFA5B8] text-white hover:bg-opacity-90 p-2 rounded-xl font-bold transition shadow hover:shadow-lg h-14 sm:h-20"
             >
-              <Home className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
-              <span className="text-xs mt-1">Buy</span>
+              <span className="text-base sm:text-lg">Buy</span>
             </Link>
             <button 
               onClick={handleComingSoonClick}
-              className="flex flex-col items-center justify-center bg-[#D84C89] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
+              className="flex items-center justify-center bg-[#D84C89] text-white hover:bg-opacity-90 p-2 rounded-xl font-bold transition shadow hover:shadow-lg h-14 sm:h-20"
             >
-              <Users className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
-              <span className="text-xs mt-1">Find Friends</span>
+              <span className="text-base sm:text-lg">Find Friends</span>
             </button>
             <button
               onClick={handleComingSoonClick}
-              className="flex flex-col items-center justify-center bg-[#DBA6CF] text-white hover:bg-opacity-90 p-2 rounded-xl font-medium transition shadow hover:shadow-lg h-14 sm:h-20" /* Reduced heights */
+              className="flex items-center justify-center bg-[#DBA6CF] text-white hover:bg-opacity-90 p-2 rounded-xl font-bold transition shadow hover:shadow-lg h-14 sm:h-20"
             >
-              <Wrench className="w-5 h-5 sm:w-6 sm:h-6" /> {/* Reduced icon sizes */}
-              <span className="text-xs mt-1">Services</span>
+              <span className="text-base sm:text-lg">Services</span>
             </button>
           </div>
         </div>

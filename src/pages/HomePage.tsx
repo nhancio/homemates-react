@@ -8,7 +8,7 @@ const HomePage = () => {
   }, []);
   
   return (
-    <div className="h-[calc(100vh-112px)] flex flex-col"> {/* Updated height to account for header (64px) and footer (48px) */}
+    <div className="h-[calc(97.1vh-112px)] flex flex-col"> {/* home image banner height */}
       <HeroBanner />
     </div>
   );

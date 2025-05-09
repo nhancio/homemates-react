@@ -274,9 +274,9 @@ const AddListingPage = () => {
               }))}
             >
               <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="any">Any</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Any">Any</option>
             </select>
           </div>
 
