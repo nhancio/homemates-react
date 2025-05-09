@@ -92,6 +92,14 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
     const path = `/${listingType}/${property.id}`;
     navigate(path);
   };
+
+  const formatAvailabilityDate = (date: string | undefined) => {
+    if (!date) return '-';
+    return new Date(date).toLocaleDateString('en-IN', {
+      month: 'short',
+      year: 'numeric'
+    });
+  };
   
   return (
     <div 
@@ -154,11 +162,13 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
         {/* Property Features */}
         <div className="flex gap-4 mt-3 text-sm text-gray-700">
           <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.propertyType?.charAt(0) || '-'}</span>
-            <span className="text-xs text-gray-500">Type</span>
+            <span className="font-semibold">
+              {property.isImmediate ? 'Immediate' : formatAvailabilityDate(property.availableFrom)}
+            </span>
+            <span className="text-xs text-gray-500">Available</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.furnishingType?.charAt(0) || '-'}</span>
+            <span className="font-semibold">{property.furnishingType || '-'}</span>
             <span className="text-xs text-gray-500">Furnishing</span>
           </div>
           <div className="flex flex-col items-center">

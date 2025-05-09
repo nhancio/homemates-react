@@ -92,8 +92,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         if (result.isNewUser) {
           setShowPreferences(true);
         }
-        // Optional: redirect to home page
-        window.location.href = '/';
+        // Remove the redirect - it will be handled by the auth service
       } else {
         console.error('Login failed:', result);
       }
