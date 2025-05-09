@@ -65,6 +65,21 @@ export interface SellListing extends ListingData {
   sellDetails: {
     price: number;
     gst: number;
+    isNegotiable: boolean;
+    propertyType: string;
+    sqft: number;
+    direction: 'East' | 'West' | 'North' | 'South' | 'North-East' | 'North-West';
+    ownership: string;
+    ageOfProperty: string;
+    totalFloors: string;
+    floorNumber: string;
+    waterSupply: string;
+    approvals: string[];
+    amenities: string[];
+    highlights: string[];
+    description: string;
+    propertyId: string;
+    loanOnProperty: boolean;
   };
 }
 

@@ -40,7 +40,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType = 're
   
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    // For share URL: rent->rent, buy->sell
     const type = listingType === 'buy' ? 'sell' : 'rent';
     const url = getShareableUrl(property.id, type);
     
@@ -53,14 +52,14 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, listingType = 're
 Name: ${property.address?.buildingName || 'Property'}
 ${listingType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(price || 0)}
 Type: ${property.propertyType || property.type || '-'}
-Location: ${property.address?.locality}, ${property.address?.city}`;
+Location: ${property.address?.locality}, ${property.address?.city}
+Link: ${url}`;
 
     try {
       if (navigator.share) {
         await navigator.share({
           title: 'Check out this property on Homemates',
           text: shareText,
-          url: url
         });
       } else {
         await navigator.clipboard.writeText(shareText);
@@ -99,6 +98,42 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
       month: 'short',
       year: 'numeric'
     });
+  };
+
+  const renderPropertyFeatures = () => {
+    if (listingType === 'buy') {
+      return (
+        <div className="flex gap-4 mt-3 text-sm text-gray-700">
+          <div className="flex flex-col items-center">
+            <span className="font-semibold">{property.sellDetails?.sqft || '-'}</span>
+            <span className="text-xs text-gray-500">Sq.ft</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="font-semibold">{property.sellDetails?.direction || '-'}</span>
+            <span className="text-xs text-gray-500">Direction</span>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex gap-4 mt-3 text-sm text-gray-700">
+        <div className="flex flex-col items-center">
+          <span className="font-semibold">
+            {property.isImmediate ? 'Immediate' : formatAvailabilityDate(property.handoverDate)}
+          </span>
+          <span className="text-xs text-gray-500">Available</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="font-semibold">{property.furnishingType || '-'}</span>
+          <span className="text-xs text-gray-500">Furnishing</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="font-semibold">{property.parking || '-'}</span>
+          <span className="text-xs text-gray-500">Parking</span>
+        </div>
+      </div>
+    );
   };
   
   return (
@@ -160,22 +195,7 @@ Location: ${property.address?.locality}, ${property.address?.city}`;
         </p>
         
         {/* Property Features */}
-        <div className="flex gap-4 mt-3 text-sm text-gray-700">
-          <div className="flex flex-col items-center">
-            <span className="font-semibold">
-              {property.isImmediate ? 'Immediate' : formatAvailabilityDate(property.availableFrom)}
-            </span>
-            <span className="text-xs text-gray-500">Available</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.furnishingType || '-'}</span>
-            <span className="text-xs text-gray-500">Furnishing</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <span className="font-semibold">{property.parking || '-'}</span>
-            <span className="text-xs text-gray-500">Parking</span>
-          </div>
-        </div>
+        {renderPropertyFeatures()}
       </div>
       
       {/* Action Bar */}

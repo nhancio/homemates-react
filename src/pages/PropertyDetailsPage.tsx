@@ -53,14 +53,23 @@ const PropertyDetailsPage = () => {
     if (!property) return;
     
     const url = getShareableUrl(property.id, listingType);
-    const shareText = `Check out this property on Homemates!\n${property.address?.buildingName}\n${url}`;
+    const shareText = 
+`Hey, check this property on Homemates!
+Name: ${property.address?.buildingName || 'Property'}
+${listingType === 'rent' ? 'Rent' : 'Price'}: ₹${formatCurrency(listingType === 'rent' ? property.rentDetails?.costs?.rent : property.sellDetails?.price || 0)}
+Type: ${property.propertyType || '-'}
+Location: ${property.address?.locality}, ${property.address?.city}
+Link: ${url}`;
 
     try {
       if (navigator.share) {
-        await navigator.share({ text: shareText, url });
+        await navigator.share({
+          title: 'Check out this property on Homemates',
+          text: shareText,
+        });
       } else {
         await navigator.clipboard.writeText(shareText);
-        alert('Link copied to clipboard!');
+        alert('Property details copied to clipboard!');
       }
     } catch (err) {
       console.error('Error sharing:', err);
@@ -166,14 +175,29 @@ const PropertyDetailsPage = () => {
                   <span className="text-gray-600">Type</span>
                   <p className="font-semibold">{property.propertyType}</p>
                 </div>
-                <div>
-                  <span className="text-gray-600">Room Type</span>
-                  <p className="font-semibold">{property.rentDetails?.roomDetails?.roomType || '-'}</p>
-                </div>
-                <div>
-                  <span className="text-gray-600">Bathroom Type</span>
-                  <p className="font-semibold">{property.rentDetails?.roomDetails?.bathroomType || '-'}</p>
-                </div>
+                {listingType === 'sell' ? (
+                  <>
+                    <div>
+                      <span className="text-gray-600">Built Up Area</span>
+                      <p className="font-semibold">{property.sellDetails?.sqft || '-'} Sq.ft</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Direction</span>
+                      <p className="font-semibold">{property.sellDetails?.direction || '-'}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <span className="text-gray-600">Room Type</span>
+                      <p className="font-semibold">{property.rentDetails?.roomDetails?.roomType || '-'}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Bathroom Type</span>
+                      <p className="font-semibold">{property.rentDetails?.roomDetails?.bathroomType || '-'}</p>
+                    </div>
+                  </>
+                )}
                 <div>
                   <span className="text-gray-600">Furnishing</span>
                   <p className="font-semibold">{property.furnishingType}</p>

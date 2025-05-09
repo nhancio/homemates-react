@@ -295,6 +295,8 @@ export const SellForm: React.FC<AddListingFormsProps> = ({
   handleImageUpload,
   removeImage
 }) => {
+  const DIRECTIONS = ['East', 'West', 'North', 'South', 'North-East', 'North-West'];
+  
   return (
     <>
       <AddressFields formData={formData} setFormData={setFormData} />
@@ -356,7 +358,36 @@ export const SellForm: React.FC<AddListingFormsProps> = ({
             </select>
           </div>
 
-          {/* ...rest of the sell form details... */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Built Up Area (Sq.ft)</label>
+            <input
+              type="number"
+              className="input"
+              value={formData.sellDetails.sqft}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                sellDetails: { ...prev.sellDetails, sqft: Number(e.target.value) }
+              }))}
+              placeholder="Enter area in square feet"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Direction</label>
+            <select 
+              className="input"
+              value={formData.sellDetails.direction}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                sellDetails: { ...prev.sellDetails, direction: e.target.value }
+              }))}
+            >
+              <option value="">Select Direction</option>
+              {DIRECTIONS.map(dir => (
+                <option key={dir} value={dir}>{dir}</option>
+              ))}
+            </select>
+          </div>
         </div>
       </section>
 

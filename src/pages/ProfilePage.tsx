@@ -51,8 +51,8 @@ const ProfilePage = () => {
     <div className="py-8">
       <div className="container">
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          {/* Cover Image */}
-          <div className="h-48 bg-gradient-to-r from-primary-600 to-primary-800"></div>
+          {/* Cover Image - Reduced height from h-48 to h-32 */}
+          <div className="h-32 bg-gradient-to-r from-primary-600 to-primary-800"></div>
           
           {/* Profile Info */}
           <div className="relative px-6 pb-6">

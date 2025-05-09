@@ -108,6 +108,8 @@ const initialFormData = {
   sellDetails: {
     price: '',
     gst: '',
+    sqft: '',  // Add this field
+    direction: '',  // Add this field
     isNegotiable: false,
     propertyType: '',
     ownership: '',
@@ -115,7 +117,6 @@ const initialFormData = {
     totalFloors: '',
     floorNumber: '',
     waterSupply: '',
-    direction: '',
     approvals: [] as string[],
     amenities: [] as string[],
     highlights: [] as string[],
@@ -622,6 +623,37 @@ const AddListingPage = () => {
               <option value="">Select Type</option>
               {PROPERTY_TYPES.map(type => (
                 <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Built Up Area (sqft)</label>
+            <input
+              type="number"
+              className="input"
+              placeholder="Enter area in sqft"
+              value={formData.sellDetails.sqft}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                sellDetails: { ...prev.sellDetails, sqft: e.target.value }
+              }))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Direction</label>
+            <select
+              className="input"
+              value={formData.sellDetails.direction}
+              onChange={(e) => setFormData(prev => ({
+                ...prev,
+                sellDetails: { ...prev.sellDetails, direction: e.target.value }
+              }))}
+            >
+              <option value="">Select Direction</option>
+              {DIRECTIONS.map(direction => (
+                <option key={direction} value={direction}>{direction}</option>
               ))}
             </select>
           </div>
