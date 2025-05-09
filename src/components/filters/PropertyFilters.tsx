@@ -9,8 +9,8 @@ interface PropertyFiltersProps {
 
 const defaultFilters = {
   rent: {
-    priceMin: 0,
-    priceMax: 100000,
+    priceMin: '',
+    priceMax: '',
     location: '',
     propertyType: '',
     roomType: '',
@@ -18,11 +18,11 @@ const defaultFilters = {
     bathroomType: ''
   },
   buy: {
-    priceMin: 0,
-    priceMax: 10000000,
+    priceMin: '',
+    priceMax: '',
     location: '',
     propertyType: '',
-    builtUpArea: 0,
+    builtUpArea: '',
     ageOfProperty: '',
     possessionStatus: ''
   }

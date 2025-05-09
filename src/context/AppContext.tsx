@@ -51,8 +51,8 @@ interface AppContextType {
 const defaultFilters: Filters = {
   activeType: 'buy',
   rent: {
-    priceMin: 0,
-    priceMax: 100000,
+    priceMin: '',
+    priceMax: '',
     location: '',
     propertyType: '',
     roomType: '',
@@ -60,11 +60,11 @@ const defaultFilters: Filters = {
     bathroomType: ''
   },
   buy: {
-    priceMin: 0,
-    priceMax: 10000000,
+    priceMin: '',
+    priceMax: '',
     location: '',
     propertyType: '',
-    builtUpArea: 0,
+    builtUpArea: '',
     ageOfProperty: '',
     possessionStatus: ''
   }
