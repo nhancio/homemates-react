@@ -181,9 +181,10 @@ export async function getListings(type: 'rent' | 'sell', filters?: any) {
 export async function getPropertyById(type: 'rent' | 'sell', id: string) {
   try {
     console.log('Fetching property:', { type, id });
-    // Use 'r' for rent and 's' for sell collections
     const collectionName = type === 'rent' ? 'r' : 's';
     const docRef = doc(db, collectionName, id);
+    
+    // Remove any auth requirements for reading
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
@@ -192,12 +193,10 @@ export async function getPropertyById(type: 'rent' | 'sell', id: string) {
     }
 
     const data = docSnap.data();
-    console.log('Found property data:', data);
-
     return {
       id: docSnap.id,
       ...data,
-      listingType: type // Add listing type to response
+      listingType: type
     };
   } catch (error) {
     console.error('Error fetching property:', error);

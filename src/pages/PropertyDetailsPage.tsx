@@ -15,7 +15,7 @@ const PropertyDetailsPage = () => {
   const [property, setProperty] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { favoriteProperties, toggleFavorite } = useAppContext();
+  const { favoriteProperties, toggleFavorite, isAuthenticated, login } = useAppContext();
 
   // Determine listing type from URL
   const listingType = location.pathname.startsWith('/rent') ? 'rent' : 'sell';
@@ -27,7 +27,6 @@ const PropertyDetailsPage = () => {
       try {
         setIsLoading(true);
         setError(null);
-        console.log('Fetching property:', { propertyId, listingType });
         const propertyData = await getPropertyById(listingType, propertyId);
         setProperty(propertyData);
       } catch (error) {
@@ -41,7 +40,18 @@ const PropertyDetailsPage = () => {
     fetchProperty();
   }, [propertyId, listingType]);
 
+  const handleLoginPrompt = () => {
+    if (window.confirm('Please login to use this feature. Would you like to login now?')) {
+      login();
+    }
+  };
+
   const handleCall = () => {
+    if (!isAuthenticated) {
+      handleLoginPrompt();
+      return;
+    }
+
     if (property?.contactNumber) {
       window.location.href = `tel:${property.contactNumber}`;
     } else {
@@ -50,7 +60,10 @@ const PropertyDetailsPage = () => {
   };
 
   const handleShare = async () => {
-    if (!property) return;
+    if (!isAuthenticated) {
+      handleLoginPrompt();
+      return;
+    }
     
     const url = getShareableUrl(property.id, listingType);
     const shareText = 
@@ -74,6 +87,15 @@ Link: ${url}`;
     } catch (err) {
       console.error('Error sharing:', err);
     }
+  };
+
+  const handleFavoriteClick = () => {
+    if (!isAuthenticated) {
+      handleLoginPrompt();
+      return;
+    }
+
+    toggleFavorite(property.id);
   };
 
   if (isLoading) {
@@ -334,11 +356,11 @@ Link: ${url}`;
                 Contact Owner
               </button>
               <button
-                onClick={() => toggleFavorite(property.id)}
+                onClick={handleFavoriteClick}
                 className="btn btn-secondary flex items-center justify-center gap-2"
               >
-                <Heart className={favoriteProperties.includes(property.id) ? 'fill-red-500' : ''} />
-                {favoriteProperties.includes(property.id) ? 'Saved' : 'Save'}
+                <Heart className={isAuthenticated && favoriteProperties.includes(property.id) ? 'fill-red-500' : ''} />
+                {isAuthenticated && favoriteProperties.includes(property.id) ? 'Saved' : 'Save'}
               </button>
               <button
                 onClick={handleShare}
