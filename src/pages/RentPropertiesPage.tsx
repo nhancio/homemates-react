@@ -47,49 +47,26 @@ const RentPropertiesPage = () => {
     document.title = 'Rent Properties | Homemates';
   }, []);
   
-  if (!isAuthenticated) {
-    return (
-      <div className="py-20">
-        <div className="container">
-          <div className="max-w-md mx-auto text-center">
-            <User className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Sign In Required</h2>
-            <p className="text-gray-600 mb-6">
-              Please sign in to view rental properties
-            </p>
-            <button 
-              onClick={() => login()}
-              className="flex items-center justify-center w-full btn btn-primary"
-            >
-              Sign in with Google
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader className="w-8 h-8 animate-spin text-primary-600" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-16 bg-gray-50 rounded-lg">
-        <Building className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-        <h3 className="text-xl font-semibold mb-2">Error Loading Properties</h3>
-        <p className="text-gray-600">{error}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="py-8">
       <div className="container">
+        {!isAuthenticated && (
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-semibold text-primary-700">Sign in to unlock more features</h2>
+                <p className="text-primary-600">Save properties, contact owners, and more!</p>
+              </div>
+              <button 
+                onClick={() => login()}
+                className="btn btn-primary"
+              >
+                Sign in with Google
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="mb-6">
           <h1 className="text-3xl font-bold mb-2">Properties for Rent</h1>
           <p className="text-gray-600">
@@ -102,18 +79,30 @@ const RentPropertiesPage = () => {
           listingType="rent"
         />
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {properties.map(property => (
-            <PropertyCard 
-              key={property.id} 
-              property={property}
-              listingType="rent"
-              onClick={() => handlePropertyClick(property.id)}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <Loader className="w-8 h-8 animate-spin text-primary-600" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-16 bg-gray-50 rounded-lg">
+            <Building className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Error Loading Properties</h3>
+            <p className="text-gray-600">{error}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {properties.map(property => (
+              <PropertyCard 
+                key={property.id} 
+                property={property}
+                listingType="rent"
+                onClick={() => handlePropertyClick(property.id)}
+              />
+            ))}
+          </div>
+        )}
         
-        {properties.length === 0 && (
+        {properties.length === 0 && !isLoading && !error && (
           <div className="text-center py-16 bg-gray-50 rounded-lg">
             <Building className="w-12 h-12 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold mb-2">No properties found</h3>
