@@ -30,4 +30,23 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  // Add base URL configuration
+  base: '/',
+  // Add build configuration
+  build: {
+    outDir: 'dist', // Change to 'dist' as Netlify prefers this
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom', 'react-router-dom']
+        }
+      }
+    }
+  },
+  server: {
+    port: 3000,
+    // Handle client-side routing in development
+    historyApiFallback: true
+  }
 });
