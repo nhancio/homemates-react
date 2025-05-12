@@ -32,8 +32,8 @@ const HIGHLIGHTS_OPTIONS = [
   'Near to Metro',
   'Gated Community',
   'Corner Property',
-  'Park Facing',
-  'Main Road Property'
+  'Main Road Property',
+  'OTP(One time Payment)'
 ];
 
 const PREFERRED_TENANT_OPTIONS = {
@@ -49,7 +49,7 @@ const PREFERRED_TENANT_OPTIONS = {
 
 const amenityOptions = {
   appliances: ['TV', 'Fridge', 'AC', 'Washing Machine', 'Water Purifier', 'Geyser'],
-  furniture: ['Bed', 'Wardrobe', 'Study Table', 'Dining Table', 'Sofa'],
+  furniture: ['Bed', 'Wardrobe', 'Study Table', 'Dining Table', 'Sofa', 'Mattress'],
   building: ['Lift', 'Power Backup', 'Security', 'Parking', 'Gym', 'Swimming Pool', 'Garden', 'CCTV']
 };
 
