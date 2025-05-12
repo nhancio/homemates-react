@@ -77,7 +77,7 @@ const initialFormData = {
     },
     roomDetails: {
       availableRooms: '',
-      roomType: '',
+      availability: '',
       bathroomType: '',
     },
     costs: {
@@ -325,7 +325,7 @@ const AddListingPage = () => {
       <section className="bg-white p-6 rounded-lg shadow-sm">
         <h2 className="text-lg font-semibold mb-4">Property Details</h2>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
-          {['1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
+          {['1RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
             <button
               key={type}
               type="button"
@@ -343,24 +343,25 @@ const AddListingPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Room Type</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Availability</label>
             <select
               className="input"
-              value={formData.rentDetails.roomDetails.roomType}
+              value={formData.rentDetails.roomDetails.availability}
               onChange={(e) => setFormData(prev => ({
                 ...prev,
                 rentDetails: {
                   ...prev.rentDetails,
                   roomDetails: {
                     ...prev.rentDetails.roomDetails,
-                    roomType: e.target.value
+                    availability: e.target.value
                   }
                 }
               }))}
             >
-              <option value="">Select Room Type</option>
-              <option value="shared">Shared</option>
-              <option value="private">Private</option>
+              <option value="">Select Availability</option>
+              <option value="1 Room">1 Room</option>
+              <option value="2 Rooms">2 Rooms</option>
+              <option value="Full Flat">Full Flat</option>
             </select>
           </div>
           <div>
@@ -592,7 +593,7 @@ const AddListingPage = () => {
         
         {/* BHK Selection */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
-          {['1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
+          {['1RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
             <button
               key={type}
               type="button"

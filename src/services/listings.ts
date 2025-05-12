@@ -40,7 +40,7 @@ export interface RentListing extends ListingData {
     };
     roomDetails: {
       availableRooms: number;
-      roomType: string;
+      availability: string;  // Changed from roomType
       bathroomType: string;
     };
     costs: {

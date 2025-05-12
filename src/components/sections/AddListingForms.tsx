@@ -89,7 +89,7 @@ export const RentForm: React.FC<AddListingFormsProps> = ({
         <h2 className="text-lg font-semibold mb-4">Property Details</h2>
         {/* BHK Selection */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
-          {['1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
+          {['1RK','1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
             <button
               key={type}
               type="button"
@@ -307,7 +307,7 @@ export const SellForm: React.FC<AddListingFormsProps> = ({
         <h2 className="text-lg font-semibold mb-4">Property Details</h2>
         {/* BHK Selection */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6">
-          {['1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
+          {['1RK', '1 BHK', '2 BHK', '3 BHK', '4 BHK', '4+ BHK'].map(type => (
             <button
               key={type}
               type="button"
